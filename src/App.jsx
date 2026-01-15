@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import './App.css'
+import { FaRegTrashAlt } from "react-icons/fa";
 
 function App() {
 
@@ -55,24 +56,43 @@ function App() {
 
   return (
     <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'rgba(126, 126, 126, 0.1)'}}>
-      <h1>Gestor de Estoque</h1>
+      <h1>Controle de Estoque</h1>
       
-      <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px', gap: '10px'}}>
+      <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', marginTop: '20px', gap: '10px', backgroundColor: 'white', width: '100%', padding: '20px', boxShadow: '3px 6px 8px rgba(0,0,0,0.2)', borderRadius: '15px'}}>
         <h3>Novo Produto</h3>
-        <p>Nome do produto:</p>
-        <input type="text" onChange={(e)=> setNomeProduto(e.target.value)} value={nomeProduto}/>
-        <p>Quantidade do produto:</p>
-        <input type="number" onChange={(e)=> setQuantidade(e.target.value)} value={quantidade}/>
-        <p>Valor do produto:</p>
-        <input type="number" onChange={(e)=> setPrecoProduto(e.target.value)} value={precoProduto}/>
-        <button type="submit">Adicionar</button>
+        <div className="box">
+          <div className="input-box">
+            <p>Nome:</p>
+            <input type="text" onChange={(e)=> setNomeProduto(e.target.value)} value={nomeProduto}/>
+          </div>
+          <div className="input-box">
+            <p>Quantidade:</p>
+            <input type="number" onChange={(e)=> setQuantidade(e.target.value)} value={quantidade}/>
+          </div>
+          <div className="input-box">
+            <p>Valor:</p>
+            <input type="number" onChange={(e)=> setPrecoProduto(e.target.value)} value={precoProduto}/>
+          </div>
+        </div>
+        <button type="submit" className="add-btn">Adicionar</button>
       </form>
-      <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px'}}>
+      <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%'}}>
         {produtos.map((produto) => (
-          <li key={produto.id}>
-            <strong>{produto.nome}</strong>
-            <br />
-            Qtd: {produto.quantidade} | R$ {produto.preco.toFixed(2)} <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'rgba(255,0,0,0.6)'}} onClick={()=> removerProduto(produto.id)}>X</button>
+          <li key={produto.id} className="list-box">
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+              <span>Nome</span>
+              <span>{produto.nome}</span>
+            </div>
+            
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '270px', height: '70px', fontSize: '20px'}}>
+              <span>Quantidade</span>
+              <span>{produto.quantidade}</span>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+              <span>Preço</span>
+              <span>R$ {produto.preco.toFixed(2)}</span>
+            </div>
+            <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '200px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
           </li>
         ))}
       </ul>
