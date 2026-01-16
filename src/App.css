@@ -71,3 +71,60 @@ h3{
     border-radius: 15px;
     box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.3);
 }
+
+.modal{
+    width: 400px;
+    height: 350px;
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 150px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal-form{
+    margin-top: 20px;
+}
+
+.modal-input{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.modal-input input{
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #E7EFFC;
+}
+
+.modal-btn{
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 10px;
+    display: block;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.modal-btn:nth-child(1){
+    background-color: rgb(80, 124, 255);
+}
+
+.modal-btn:nth-child(2){
+    background-color: rgb(255, 0, 0);
+}
