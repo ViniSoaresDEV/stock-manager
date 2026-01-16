@@ -125,7 +125,7 @@ function App() {
           </div>
           <button type="submit" className="add-btn">Adicionar</button>
         </form>
-        <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%', maxHeight: '400px', overflowY: 'scroll'}}>
+        <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%', maxHeight: '400px', overflowY: 'scroll', paddingRight: '20px'}}>
           {produtos.map((produto) => (
             <li key={produto.id} className="list-box">
               <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
