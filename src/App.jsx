@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react"
 import './App.css'
 import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import ModalEditar from "./components/ModalEditar";
+
 
 function App() {
 
@@ -21,6 +24,13 @@ function App() {
   const [nomeProduto, setNomeProduto] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [precoProduto, setPrecoProduto] = useState('');
+
+  // Variáveis de edição de texto
+  const [modalEdit, setModalEdit] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [editNomeProduto, setEditNomeProduto] = useState('');
+  const [editQuantidade, setEditQuantidade] = useState('');
+  const [editPreco, setEditPreco] = useState('');
 
 
   useEffect(()=>{
@@ -57,9 +67,44 @@ function App() {
     setProdutos(novaLista)
   }
 
+  function preparaEdicao(produto){
+    setModalEdit(true);
+    setEditId(produto.id);
+    setEditNomeProduto(produto.nome);
+    setEditQuantidade(produto.quantidade)
+    setEditPreco(produto.preco)
+  }
+
+  function salvaEdicao(evento){
+
+    evento.preventDefault();
+
+    const novaLista = produtos.map((produto)=> {
+      if(produto.id === editId){
+        return{
+          ...produto,
+          nome: editNomeProduto,
+          quantidade: Number(editQuantidade),
+          preco: Number(editPreco)
+        }
+      }
+
+      return produto;
+    })
+
+    if(!editNomeProduto || !editQuantidade || !editPreco){
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    setProdutos(novaLista);
+    setModalEdit(!modalEdit);
+
+  }
+
   return (
     <div style={{ backgroundColor: 'rgba(126, 126, 126, 0.1)', height: '100vh'}}>
-      <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '1200px', margin: '0 auto'}}>
+      <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '1200px', margin: '0 auto', position: 'relative'}}>
         <h1>Controle de Estoque</h1>
       
         <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', marginTop: '20px', gap: '10px', backgroundColor: 'white', width: '100%', padding: '20px', boxShadow: '3px 6px 8px rgba(0,0,0,0.2)', borderRadius: '15px'}}>
@@ -96,10 +141,16 @@ function App() {
                 <span>Preço</span>
                 <span>R$ {produto.preco.toFixed(2)}</span>
               </div>
-              <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '200px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
+              <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '100px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
+              <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: '#507CFF', fontSize: '18px', width: '100px'}} onClick={()=> preparaEdicao(produto)}><FaRegEdit/> Editar</button>
             </li>
           ))}
         </ul>
+        
+        {/*MODAL SECTION*/}
+        {modalEdit &&
+        <ModalEditar fecharModal={()=> setModalEdit(!modalEdit)} salvar={salvaEdicao} nome={editNomeProduto} setNome={setEditNomeProduto} qtd={editQuantidade} setQtd={setEditQuantidade} preco={editPreco} setPreco={setEditPreco}/>
+        }
       </div>
     </div>
   )
