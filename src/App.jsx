@@ -32,7 +32,10 @@ function App() {
   function adicionarProduto(evento){
     evento.preventDefault();
 
-    if(!nomeProduto || !precoProduto) return;
+    if(!nomeProduto || !precoProduto || !quantidade){
+      alert("Por favor, preencha os campos corretamente.");
+      return;
+    }
 
     const novoItem = {
       id: Math.random(),
@@ -55,47 +58,49 @@ function App() {
   }
 
   return (
-    <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'rgba(126, 126, 126, 0.1)'}}>
-      <h1>Controle de Estoque</h1>
+    <div style={{ backgroundColor: 'rgba(126, 126, 126, 0.1)', height: '100vh'}}>
+      <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '1200px', margin: '0 auto'}}>
+        <h1>Controle de Estoque</h1>
       
-      <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', marginTop: '20px', gap: '10px', backgroundColor: 'white', width: '100%', padding: '20px', boxShadow: '3px 6px 8px rgba(0,0,0,0.2)', borderRadius: '15px'}}>
-        <h3>Novo Produto</h3>
-        <div className="box">
-          <div className="input-box">
-            <p>Nome:</p>
-            <input type="text" onChange={(e)=> setNomeProduto(e.target.value)} value={nomeProduto}/>
-          </div>
-          <div className="input-box">
-            <p>Quantidade:</p>
-            <input type="number" onChange={(e)=> setQuantidade(e.target.value)} value={quantidade}/>
-          </div>
-          <div className="input-box">
-            <p>Valor:</p>
-            <input type="number" onChange={(e)=> setPrecoProduto(e.target.value)} value={precoProduto}/>
-          </div>
-        </div>
-        <button type="submit" className="add-btn">Adicionar</button>
-      </form>
-      <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%'}}>
-        {produtos.map((produto) => (
-          <li key={produto.id} className="list-box">
-            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
-              <span>Nome</span>
-              <span>{produto.nome}</span>
+        <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', marginTop: '20px', gap: '10px', backgroundColor: 'white', width: '100%', padding: '20px', boxShadow: '3px 6px 8px rgba(0,0,0,0.2)', borderRadius: '15px'}}>
+          <h3>Novo Produto</h3>
+          <div className="box">
+            <div className="input-box">
+              <p>Nome:</p>
+              <input type="text" onChange={(e)=> setNomeProduto(e.target.value)} value={nomeProduto}/>
             </div>
-            
-            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '270px', height: '70px', fontSize: '20px'}}>
-              <span>Quantidade</span>
-              <span>{produto.quantidade}</span>
+            <div className="input-box">
+              <p>Quantidade:</p>
+              <input type="number" onChange={(e)=> setQuantidade(e.target.value)} value={quantidade}/>
             </div>
-            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
-              <span>Preço</span>
-              <span>R$ {produto.preco.toFixed(2)}</span>
+            <div className="input-box">
+              <p>Valor:</p>
+              <input type="number" onChange={(e)=> setPrecoProduto(e.target.value)} value={precoProduto}/>
             </div>
-            <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '200px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
-          </li>
-        ))}
-      </ul>
+          </div>
+          <button type="submit" className="add-btn">Adicionar</button>
+        </form>
+        <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%', maxHeight: '400px', overflowY: 'scroll'}}>
+          {produtos.map((produto) => (
+            <li key={produto.id} className="list-box">
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+                <span>Nome</span>
+                <span>{produto.nome}</span>
+              </div>
+      
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '270px', height: '70px', fontSize: '20px'}}>
+                <span>Quantidade</span>
+                <span>{produto.quantidade}</span>
+              </div>
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+                <span>Preço</span>
+                <span>R$ {produto.preco.toFixed(2)}</span>
+              </div>
+              <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '200px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
