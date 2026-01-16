@@ -1,4 +1,4 @@
-import "../App.css"
+import "./ModalEditar.css"
 import { MdOutlineCancel } from "react-icons/md";
 import { FaRegSave } from "react-icons/fa";
 import { PiCornersOutLight } from "react-icons/pi";
