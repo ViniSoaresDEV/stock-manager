@@ -26,7 +26,17 @@ h1{
 
 h3{
     font-size: 30px;
-    margin-bottom: 30px;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+        margin-bottom: 30px;
+}
+
+.header span{
+    font-size: 18px;
 }
 
 .input-box{
