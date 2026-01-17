@@ -25,6 +25,11 @@ function App() {
   const [quantidade, setQuantidade] = useState('');
   const [precoProduto, setPrecoProduto] = useState('');
 
+  const valorTotal = produtos.reduce((acc, item)=>{
+    return acc + (item.preco * item.quantidade);
+  }, 0);
+ 
+
   // Variáveis de edição de texto
   const [modalEdit, setModalEdit] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -36,6 +41,7 @@ function App() {
   useEffect(()=>{
     localStorage.setItem('estoque_salao', JSON.stringify(produtos));
   }, [produtos])
+
 
 
   // Função para validar, adicionar os novos itens a lista e resetar seus valores após enviar
@@ -108,7 +114,10 @@ function App() {
         <h1>Controle de Estoque</h1>
       
         <form onSubmit={adicionarProduto} style={{display: 'flex', flexDirection: 'column', marginTop: '20px', gap: '10px', backgroundColor: 'white', width: '100%', padding: '20px', boxShadow: '3px 6px 8px rgba(0,0,0,0.2)', borderRadius: '15px'}}>
-          <h3>Novo Produto</h3>
+          <div className="header">
+            <h3>Novo Produto</h3>
+            <span>Valor total em estoque: <strong> {valorTotal.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</strong></span>
+          </div>
           <div className="box">
             <div className="input-box">
               <p>Nome:</p>
