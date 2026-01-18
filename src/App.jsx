@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import './App.css'
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
-import ModalEditar from "./components/ModalEditar";
+import ModalEditar from "./components/ModalEditar/ModalEditar";
+import SideMenu from "./components/Side Menu/SideMenu";
 
 
 function App() {
@@ -110,7 +111,8 @@ function App() {
   }
 
   return (
-    <div style={{ backgroundColor: 'rgba(126, 126, 126, 0.1)', height: '100vh'}}>
+    <div style={{ backgroundColor: 'rgba(126, 126, 126, 0.1)', height: '100vh', display: 'flex'}}>
+      <SideMenu />
       <div style={{padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '1200px', margin: '0 auto', position: 'relative'}}>
         <h1>Controle de Estoque</h1>
       
