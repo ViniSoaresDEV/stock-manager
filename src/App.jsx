@@ -36,6 +36,7 @@ function App() {
   const [editNomeProduto, setEditNomeProduto] = useState('');
   const [editQuantidade, setEditQuantidade] = useState('');
   const [editPreco, setEditPreco] = useState('');
+  
 
 
   useEffect(()=>{
@@ -57,7 +58,7 @@ function App() {
       id: Math.random(),
       nome: nomeProduto,
       quantidade: Number(quantidade),
-      preco: Number(precoProduto)
+      preco: Number(precoProduto),
     }
 
     setProdutos([...produtos, novoItem]);
@@ -91,7 +92,7 @@ function App() {
           ...produto,
           nome: editNomeProduto,
           quantidade: Number(editQuantidade),
-          preco: Number(editPreco)
+          preco: Number(editPreco),
         }
       }
 
@@ -137,18 +138,22 @@ function App() {
         <ul style={{display: "flex", flexDirection: 'column', gap: '10px', marginTop: '30px', width: '100%', maxHeight: '400px', overflowY: 'scroll', paddingRight: '20px'}}>
           {produtos.map((produto) => (
             <li key={produto.id} className="list-box">
-              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '150px', height: '70px', fontSize: '20px'}}>
                 <span>Nome</span>
                 <span>{produto.nome}</span>
               </div>
       
-              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '270px', height: '70px', fontSize: '20px'}}>
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '150px', height: '70px', fontSize: '20px'}}>
                 <span>Quantidade</span>
                 <span>{produto.quantidade}</span>
               </div>
-              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '250px', height: '70px', fontSize: '20px'}}>
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '150px', height: '70px', fontSize: '20px'}}>
                 <span>Preço</span>
-                <span>R$ {produto.preco.toFixed(2)}</span>
+                <span>{produto.preco.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</span>
+              </div>
+              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', width: '150px', height: '70px', fontSize: '20px'}}>
+                <span>Valor total</span>
+                <span>{(Number(produto.quantidade) * Number(produto.preco)).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</span>
               </div>
               <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: 'red', fontSize: '18px', width: '100px'}} onClick={()=> removerProduto(produto.id)}><FaRegTrashAlt/> Remover</button>
               <button style={{marginLeft: '10px', textAlign: 'center', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: '#507CFF', fontSize: '18px', width: '100px'}} onClick={()=> preparaEdicao(produto)}><FaRegEdit/> Editar</button>
