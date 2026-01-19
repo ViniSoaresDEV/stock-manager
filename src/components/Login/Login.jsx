@@ -7,18 +7,27 @@ function Login({ onLogin }) {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
 
+  const usuariosCadastrados = [
+    { user: "adm", password: "123" },
+    { user: "vinicius", password: "abc" },
+    { user: "victor", password: "321" },
+  ];
+
   function validaLogin() {
     if (!usuario || !senha) {
       alert("Preencha o usuário e a senha");
       return;
     }
 
-    if (usuario !== "adm" || senha !== "123") {
-      alert("Usuário ou senha incorretos");
-      return;
-    }
+    const usuarioEncontrado = usuariosCadastrados.find((cadastro) => {
+      return cadastro.user === usuario && cadastro.password === senha;
+    });
 
-    onLogin();
+    if (usuarioEncontrado) {
+      onLogin();
+    } else {
+      alert("Usuário ou senha incorretos.");
+    }
   }
 
   return (
