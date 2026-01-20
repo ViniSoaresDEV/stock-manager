@@ -4,6 +4,7 @@ import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
 import ModalEditar from "./components/ModalEditar/ModalEditar";
 import SideMenu from "./components/Side Menu/SideMenu";
 import Login from "./components/Login/Login";
+import { WiAlien } from "react-icons/wi";
 
 function App() {
   // -------------------------------------------------
@@ -27,16 +28,23 @@ function App() {
   };
 
   // Estado de Produtos
-  const [produtos, setProdutos] = useState(() => {
-    const dadosSalvos = localStorage.getItem("estoque_salao");
-    if (dadosSalvos) {
-      return JSON.parse(dadosSalvos);
+  const [produtos, setProdutos] = useState([]);
+  const API_URL = "https://696fc18ba06046ce6187c5cc.mockapi.io/produtos";
+
+  async function buscarProduto() {
+    try {
+      const resposta = await fetch(API_URL);
+      const dados = await resposta.json();
+
+      setProdutos(dados);
+    } catch (erro) {
+      console.error("Erro ao buscar produtos.", erro);
     }
-    return [
-      { id: 1, nome: "Sofá de Espera", quantidade: 2, preco: 1200.0 },
-      { id: 2, nome: "Cadeira de Corte", quantidade: 5, preco: 850.0 },
-    ];
-  });
+  }
+
+  useEffect(() => {
+    buscarProduto();
+  }, []);
 
   // Inputs
   const [nomeProduto, setNomeProduto] = useState("");
@@ -51,11 +59,6 @@ function App() {
   const [editPreco, setEditPreco] = useState("");
   const [paginaAtual, setPaginaAtual] = useState("estoque");
 
-  // Effect para salvar produtos
-  useEffect(() => {
-    localStorage.setItem("estoque_salao", JSON.stringify(produtos));
-  }, [produtos]);
-
   // Cálculo derivado (não precisa de state)
   const valorTotal = produtos.reduce((acc, item) => {
     return acc + item.preco * item.quantidade;
@@ -65,27 +68,92 @@ function App() {
   // 2. FUNÇÕES LÓGICAS (Adicionar, Remover, Editar)
   // -------------------------------------------------
 
-  function adicionarProduto(evento) {
+  async function adicionarProduto(evento) {
     evento.preventDefault();
-    if (!nomeProduto || !precoProduto || !quantidade) {
-      alert("Por favor, preencha os campos corretamente.");
+
+    if (!nomeProduto || !quantidade || !precoProduto) {
+      alert("Por favor, preencha todos os dados.");
       return;
     }
+
     const novoItem = {
-      id: Math.random(),
       nome: nomeProduto,
       quantidade: Number(quantidade),
       preco: Number(precoProduto),
     };
-    setProdutos([...produtos, novoItem]);
-    setNomeProduto("");
-    setQuantidade("");
-    setPrecoProduto("");
+
+    try {
+      const resposta = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoItem),
+      });
+
+      const itemCriado = await resposta.json();
+
+      setProdutos([...produtos, itemCriado]);
+
+      // Limpa os inputs
+      setNomeProduto("");
+      setQuantidade("");
+      setPrecoProduto("");
+    } catch (erro) {
+      alert("Erro ao adicionar produto.");
+      console.error(erro);
+    }
   }
 
-  function removerProduto(idProduto) {
-    const novaLista = produtos.filter((item) => item.id != idProduto);
-    setProdutos(novaLista);
+  async function removerProduto(idProduto) {
+    if (!confirm("Tem certeza que deseja remover?")) return;
+
+    try {
+      await fetch(`${API_URL}/${idProduto}`, {
+        method: "DELETE",
+      });
+
+      const novaLista = produtos.filter((item) => item.id !== idProduto);
+      setProdutos(novaLista);
+    } catch (erro) {
+      alert("Erro ao remover produto.");
+      console.error(erro);
+    }
+  }
+
+  async function salvaEdicao(evento) {
+    evento.preventDefault();
+
+    if (!editNomeProduto || !editQuantidade || !editPreco) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const itemEditado = {
+      nome: editNomeProduto,
+      quantidade: Number(editQuantidade),
+      preco: Number(editPreco),
+    };
+
+    try {
+      await fetch(`${API_URL}/${editId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(itemEditado),
+      });
+
+      const novaLista = produtos.map((produto) => {
+        if (produto.id === editId) {
+          return { ...produto, ...itemEditado };
+        }
+
+        return produto;
+      });
+
+      setProdutos(novaLista);
+      setModalEdit(false);
+    } catch (erro) {
+      alert("Erro ao salvar edição.");
+      console.error(erro);
+    }
   }
 
   function preparaEdicao(produto) {
@@ -94,28 +162,6 @@ function App() {
     setEditNomeProduto(produto.nome);
     setEditQuantidade(produto.quantidade);
     setEditPreco(produto.preco);
-  }
-
-  function salvaEdicao(evento) {
-    evento.preventDefault();
-    const novaLista = produtos.map((produto) => {
-      if (produto.id === editId) {
-        return {
-          ...produto,
-          nome: editNomeProduto,
-          quantidade: Number(editQuantidade),
-          preco: Number(editPreco),
-        };
-      }
-      return produto;
-    });
-
-    if (!editNomeProduto || !editQuantidade || !editPreco) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-    setProdutos(novaLista);
-    setModalEdit(!modalEdit);
   }
 
   // -------------------------------------------------

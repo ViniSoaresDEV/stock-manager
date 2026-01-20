@@ -2,31 +2,32 @@ import { useState } from "react";
 import "./Login.css";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+import { LuAperture } from "react-icons/lu";
 
 function Login({ onLogin }) {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
 
-  const usuariosCadastrados = [
-    { user: "adm", password: "123" },
-    { user: "vinicius", password: "abc" },
-    { user: "victor", password: "321" },
-  ];
-
-  function validaLogin() {
+  async function validaLogin() {
     if (!usuario || !senha) {
       alert("Preencha o usuário e a senha");
       return;
     }
 
-    const usuarioEncontrado = usuariosCadastrados.find((cadastro) => {
-      return cadastro.user === usuario && cadastro.password === senha;
+    const resposta = await fetch(
+      "https://696fc18ba06046ce6187c5cc.mockapi.io/users",
+    );
+    const dados = await resposta.json();
+
+    const usuarioEncontrado = dados.find((user) => {
+      return user.user === usuario && user.password === senha;
     });
 
     if (usuarioEncontrado) {
       onLogin();
     } else {
       alert("Usuário ou senha incorretos.");
+      console.log(dados.user);
     }
   }
 
