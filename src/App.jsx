@@ -11,6 +11,7 @@ function App() {
   // 1. TODOS OS HOOKS (STATES E EFFECTS) FICAM AQUI NO TOPO
   // -------------------------------------------------
 
+
   // Estado de Login (Com persistência no LocalStorage)
   const [logado, setLogado] = useState(() => {
     return localStorage.getItem("logado") === "sim";
@@ -44,6 +45,13 @@ function App() {
 
   useEffect(() => {
     buscarProduto();
+
+    const intervalo = setInterval(()=>{
+      buscarProduto();
+      console.log("buscando produtos...")
+    }, 10000);
+
+    return ()=> clearInterval(intervalo);
   }, []);
 
   // Inputs
