@@ -196,32 +196,12 @@ function App() {
     >
       <SideMenu onLogout={handleLogout} navegar={setPaginaAtual} />
       {paginaAtual === "estoque" && (
-        <div
-          style={{
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "1200px",
-            margin: "0 auto",
-            position: "relative",
-          }}
+        <div className="estoque-container"
         >
           <h1 className="invetary-title">Controle de Estoque</h1>
 
-          <form
+          <form className="estoque-form"
             onSubmit={adicionarProduto}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "20px",
-              gap: "10px",
-              backgroundColor: "white",
-              width: "100%",
-              padding: "20px",
-              boxShadow: "3px 6px 8px rgba(0,0,0,0.2)",
-              borderRadius: "15px",
-            }}
           >
             <div className="header">
               <h3>Novo Produto</h3>
