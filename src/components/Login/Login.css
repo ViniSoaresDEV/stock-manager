@@ -72,3 +72,23 @@
 .login-btn:hover {
   background-color: #3665ff;
 }
+
+@media (min-width: 320px) and (max-width: 420px){
+
+  .container{
+    height: calc(100vh - 60px);
+  }
+
+  .login-box{
+    width: 300px;
+    height: 340px;
+  }
+
+  .login-title{
+    font-size: 22px;
+  }
+  
+  .input-container{
+    margin-top: 20px;
+  }
+}

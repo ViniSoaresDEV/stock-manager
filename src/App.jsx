@@ -247,18 +247,18 @@ function App() {
               <li key={produto.id} className="list-box">
                 <div className="list-box-div"
                 >
-                  <span>Nome</span>
+                  <span><strong>Nome:</strong></span>
                   <span title={produto.nome}>{produto.nome}</span>
                 </div>
 
                 <div className="list-box-div"
                 >
-                  <span>Quantidade</span>
+                  <span><strong>Quantidade:</strong></span>
                   <span>{produto.quantidade}</span>
                 </div>
                 <div className="list-box-div"
                 >
-                  <span>Preço</span>
+                  <span><strong>Preço</strong></span>
                   <span>
                     {produto.preco.toLocaleString("pt-BR", {
                       style: "currency",
@@ -268,7 +268,7 @@ function App() {
                 </div>
                 <div className="valor-total-item"
                 >
-                  <span>Valor total</span>
+                  <span><strong>Valor total:</strong></span>
                   <span>
                     {(
                       Number(produto.quantidade) * Number(produto.preco)
