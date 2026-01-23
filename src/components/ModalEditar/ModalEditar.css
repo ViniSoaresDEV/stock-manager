@@ -54,3 +54,14 @@
 .modal-btn:nth-child(2){
     background-color: rgb(255, 0, 0);
 }
+
+@media (min-width: 320px) and (max-width: 420px){
+    .modal{
+        width: 300px;
+        top: 300px;
+    }
+
+    .modal-btn{
+        width: 100%;
+    }
+}

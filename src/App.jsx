@@ -186,16 +186,16 @@ function App() {
   // 4. RENDERIZAÇÃO DO DASHBOARD (O "Else" implícito)
   // -------------------------------------------------
   return (
-    <div
-      style={{
-        backgroundColor: "rgba(126, 126, 126, 0.1)",
-        height: "100vh",
-        display: "flex",
-      }}
+    <div className="app-container"
     >
+      {/* <SideMenu onLogout={handleLogout} navegar={setPaginaAtual} />
+      {paginaAtual === "estoque" && ( */}
+        <div className="estoque-container"
+        >
       <SideMenu onLogout={handleLogout} navegar={setPaginaAtual} />
       {paginaAtual === "estoque" && (
         <div className="estoque-container">
+
           <h1 className="invetary-title">Controle de Estoque</h1>
 
           <form className="estoque-form" onSubmit={adicionarProduto}>
@@ -242,58 +242,24 @@ function App() {
               Adicionar
             </button>
           </form>
-          <ul
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              marginTop: "30px",
-              width: "100%",
-              maxHeight: "400px",
-              overflowY: "scroll",
-              paddingRight: "20px",
-            }}
+          <ul className="ul"
           >
             {produtos.map((produto) => (
               <li key={produto.id} className="list-box">
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-evenly",
-                    width: "150px",
-                    height: "70px",
-                    fontSize: "20px",
-                  }}
+                <div className="list-box-div"
                 >
-                  <span>Nome</span>
-                  <span>{produto.nome}</span>
+                  <span><strong>Nome:</strong></span>
+                  <span title={produto.nome}>{produto.nome}</span>
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-evenly",
-                    width: "150px",
-                    height: "70px",
-                    fontSize: "20px",
-                  }}
+                <div className="list-box-div"
                 >
-                  <span>Quantidade</span>
+                  <span><strong>Quantidade:</strong></span>
                   <span>{produto.quantidade}</span>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-evenly",
-                    width: "150px",
-                    height: "70px",
-                    fontSize: "20px",
-                  }}
+                <div className="list-box-div"
                 >
-                  <span>Preço</span>
+                  <span><strong>Preço</strong></span>
                   <span>
                     {produto.preco.toLocaleString("pt-BR", {
                       style: "currency",
@@ -301,17 +267,9 @@ function App() {
                     })}
                   </span>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-evenly",
-                    width: "150px",
-                    height: "70px",
-                    fontSize: "20px",
-                  }}
+                <div className="valor-total-item"
                 >
-                  <span>Valor total</span>
+                  <span><strong>Valor total:</strong></span>
                   <span>
                     {(
                       Number(produto.quantidade) * Number(produto.preco)
@@ -321,36 +279,18 @@ function App() {
                     })}
                   </span>
                 </div>
-                <button
-                  style={{
-                    marginLeft: "10px",
-                    textAlign: "center",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "red",
-                    fontSize: "18px",
-                    width: "100px",
-                  }}
-                  onClick={() => removerProduto(produto.id)}
-                >
-                  <FaRegTrashAlt /> Remover
-                </button>
-                <button
-                  style={{
-                    marginLeft: "10px",
-                    textAlign: "center",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#507CFF",
-                    fontSize: "18px",
-                    width: "100px",
-                  }}
-                  onClick={() => preparaEdicao(produto)}
-                >
-                  <FaRegEdit /> Editar
-                </button>
+                <div className="list-box-buttons">
+                  <button className="remove-button"
+                    onClick={() => removerProduto(produto.id)}
+                  >
+                    <FaRegTrashAlt /> Remover
+                  </button>
+                  <button className="edit-button"
+                    onClick={() => preparaEdicao(produto)}
+                  >
+                    <FaRegEdit /> Editar
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -369,7 +309,7 @@ function App() {
             />
           )}
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 }
