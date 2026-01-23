@@ -11,7 +11,6 @@ function App() {
   // 1. TODOS OS HOOKS (STATES E EFFECTS) FICAM AQUI NO TOPO
   // -------------------------------------------------
 
-
   // Estado de Login (Com persistência no LocalStorage)
   const [logado, setLogado] = useState(() => {
     return localStorage.getItem("logado") === "sim";
@@ -46,12 +45,12 @@ function App() {
   useEffect(() => {
     buscarProduto();
 
-    const intervalo = setInterval(()=>{
+    const intervalo = setInterval(() => {
       buscarProduto();
-      console.log("buscando produtos...")
+      console.log("buscando produtos...");
     }, 10000);
 
-    return ()=> clearInterval(intervalo);
+    return () => clearInterval(intervalo);
   }, []);
 
   // Inputs
@@ -193,11 +192,13 @@ function App() {
       {paginaAtual === "estoque" && ( */}
         <div className="estoque-container"
         >
+      <SideMenu onLogout={handleLogout} navegar={setPaginaAtual} />
+      {paginaAtual === "estoque" && (
+        <div className="estoque-container">
+
           <h1 className="invetary-title">Controle de Estoque</h1>
 
-          <form className="estoque-form"
-            onSubmit={adicionarProduto}
-          >
+          <form className="estoque-form" onSubmit={adicionarProduto}>
             <div className="header">
               <h3>Novo Produto</h3>
               <span>
