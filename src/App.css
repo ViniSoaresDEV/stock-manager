@@ -9,6 +9,13 @@
   font-family: "Roboto", sans-serif;
 }
 
+.app-container{
+  background-color: rgba(126, 126, 126, 0.1);
+  height: 100vh;
+  display: flex;
+  width: 100%;
+}
+
 .invetary-title {
   background-color: white;
   width: 100%;
@@ -22,7 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
 }
@@ -46,12 +53,13 @@
   justify-content: space-between;
 }
 
-h3 {
+.header h3 {
   font-size: 30px;
 }
 
 .header {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
@@ -80,6 +88,26 @@ h3 {
   font-size: 22px;
 }
 
+.ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 30px;
+  width: 100%;
+  height: 400px;
+  padding-right: 20px;
+  overflow-y: scroll;
+  /* overflow-x: hidden; */
+}
+
+.list-box-buttons{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  padding: 10px 0;
+}
+
 .add-btn {
   padding: 12px;
   border-radius: 10px;
@@ -102,4 +130,168 @@ h3 {
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.list-box-div{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 150px;
+  height: 70px;
+  font-size: 20px;
+}
+
+.valor-total-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 150px;
+  height: 70px;
+  font-size: 20px;
+}
+
+.remove-button{
+  margin-left: 10px;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+  width: 100px;
+}
+.edit-button{
+  margin-left: 10px;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #507CFF;
+  font-size: 18px;
+  width: 100px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+
+  .header{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header h3{
+    font-size: 24px;
+  }
+
+  .box{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .add-btn{
+    width: 400px;
+    align-self: center;
+  }
+
+  .input-box input{
+    width: 160px;
+  }
+
+  .input-box p{
+    font-size: 18px;
+  }
+
+  .invetary-title{
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .list-box-div span{
+    font-size: 16px;
+  }
+
+  .valor-total-item span{
+    font-size: 16px;
+  }
+
+  .remove-button, .edit-button{
+    font-size: 16px;
+  }
+
+
+
+}
+
+@media (min-width: 320px) and (max-width: 420px){
+
+  .app-container{
+    height: 100%;
+  }
+
+  .header{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header h3{
+    font-size: 18px;
+  }
+
+  .header span{
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .box{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .add-btn{
+    width: 100px;
+    align-self: center;
+  }
+
+  .input-box input{
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .input-box p{
+    font-size: 16px;
+  }
+
+  .invetary-title{
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .list-box{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-box-div{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+    border: 1px solid red;
+
+  }
+
+  .list-box-div span{
+    font-size: 16px;
+  }
+
+  .valor-total-item span{
+    font-size: 16px;
+  }
+
+  .remove-button, .edit-button{
+    font-size: 16px;
+  }
+
+  
 }
