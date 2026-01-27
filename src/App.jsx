@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { FaRegTrashAlt, FaRegEdit, FaBars } from "react-icons/fa";
 import ModalEditar from "./components/ModalEditar/ModalEditar";
 import SideMenu from "./components/Side Menu/SideMenu";
 import Login from "./components/Login/Login";
-import { WiAlien } from "react-icons/wi";
 
 function App() {
   // -------------------------------------------------
   // 1. TODOS OS HOOKS (STATES E EFFECTS) FICAM AQUI NO TOPO
   // -------------------------------------------------
-
 
   // Estado de Login (Com persistência no LocalStorage)
   const [logado, setLogado] = useState(() => {
@@ -25,6 +23,7 @@ function App() {
 
   const handleLogout = () => {
     setLogado(false);
+    setMenuAberto(!menuAberto);
     localStorage.setItem("logado", "nao");
   };
 
@@ -37,7 +36,10 @@ function App() {
       const resposta = await fetch(API_URL);
       const dados = await resposta.json();
 
-      setProdutos(dados);
+      // Pequena proteção extra para evitar erros se a API falhar
+      if (Array.isArray(dados)) {
+        setProdutos(dados);
+      }
     } catch (erro) {
       console.error("Erro ao buscar produtos.", erro);
     }
@@ -46,12 +48,12 @@ function App() {
   useEffect(() => {
     buscarProduto();
 
-    const intervalo = setInterval(()=>{
+    const intervalo = setInterval(() => {
       buscarProduto();
-      console.log("buscando produtos...")
+      console.log("buscando produtos...");
     }, 10000);
 
-    return ()=> clearInterval(intervalo);
+    return () => clearInterval(intervalo);
   }, []);
 
   // Inputs
@@ -67,10 +69,15 @@ function App() {
   const [editPreco, setEditPreco] = useState("");
   const [paginaAtual, setPaginaAtual] = useState("estoque");
 
+  const [menuAberto, setMenuAberto] = useState(false); // variável de estado para mostrar/não mostrar o SideMenu
+
   // Cálculo derivado (não precisa de state)
-  const valorTotal = produtos.reduce((acc, item) => {
-    return acc + item.preco * item.quantidade;
-  }, 0);
+  // Adicionei uma proteção (Array.isArray) para evitar erro no reduce
+  const valorTotal = Array.isArray(produtos)
+    ? produtos.reduce((acc, item) => {
+        return acc + item.preco * item.quantidade;
+      }, 0)
+    : 0;
 
   // -------------------------------------------------
   // 2. FUNÇÕES LÓGICAS (Adicionar, Remover, Editar)
@@ -176,28 +183,37 @@ function App() {
   // 3. CONDICIONAL DE RENDERIZAÇÃO (O "Login Check")
   // -------------------------------------------------
 
-  // AGORA SIM: Podemos verificar se está logado.
-  // Como todos os hooks já foram lidos lá em cima, o React não vai reclamar.
   if (!logado) {
-    // Precisamos passar a função handleLogin para o componente filho saber o que fazer
     return <Login onLogin={handleLogin} />;
   }
 
   // -------------------------------------------------
-  // 4. RENDERIZAÇÃO DO DASHBOARD (O "Else" implícito)
+  // 4. RENDERIZAÇÃO DO DASHBOARD
   // -------------------------------------------------
   return (
-    <div className="app-container"
-    >
-      {/* <SideMenu onLogout={handleLogout} navegar={setPaginaAtual} />
-      {paginaAtual === "estoque" && ( */}
-        <div className="estoque-container"
-        >
+    <div className="app-container">
+      {/* Menu Lateral sempre visível */}
+
+      <button
+        className="hamburger-menu" // classe para estilizar o botão do hamburger menu
+        onClick={() => setMenuAberto(!menuAberto)} // Cada vez clicado, o estado do menuAberto muda
+      >
+        <FaBars />
+      </button>
+
+      <SideMenu
+        onLogout={handleLogout}
+        navegar={setPaginaAtual}
+        ativo={menuAberto} // Passa o estado atual do menuAberto
+        fechar={() => setMenuAberto(false)} // executa a troca do menuAberto para false
+      />
+
+      {/* Condicional para mostrar o Estoque */}
+      {paginaAtual === "estoque" && (
+        <div className="estoque-container">
           <h1 className="invetary-title">Controle de Estoque</h1>
 
-          <form className="estoque-form"
-            onSubmit={adicionarProduto}
-          >
+          <form className="estoque-form" onSubmit={adicionarProduto}>
             <div className="header">
               <h3>Novo Produto</h3>
               <span>
@@ -241,34 +257,38 @@ function App() {
               Adicionar
             </button>
           </form>
-          <ul className="ul"
-          >
+
+          <ul className="ul">
             {produtos.map((produto) => (
               <li key={produto.id} className="list-box">
-                <div className="list-box-div"
-                >
-                  <span><strong>Nome:</strong></span>
+                <div className="list-box-div">
+                  <span>
+                    <strong>Nome:</strong>
+                  </span>
                   <span title={produto.nome}>{produto.nome}</span>
                 </div>
 
-                <div className="list-box-div"
-                >
-                  <span><strong>Quantidade:</strong></span>
+                <div className="list-box-div">
+                  <span>
+                    <strong>Quantidade:</strong>
+                  </span>
                   <span>{produto.quantidade}</span>
                 </div>
-                <div className="list-box-div"
-                >
-                  <span><strong>Preço</strong></span>
+                <div className="list-box-div">
                   <span>
-                    {produto.preco.toLocaleString("pt-BR", {
+                    <strong>Preço</strong>
+                  </span>
+                  <span>
+                    {Number(produto.preco).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                     })}
                   </span>
                 </div>
-                <div className="valor-total-item"
-                >
-                  <span><strong>Valor total:</strong></span>
+                <div className="valor-total-item">
+                  <span>
+                    <strong>Valor total:</strong>
+                  </span>
                   <span>
                     {(
                       Number(produto.quantidade) * Number(produto.preco)
@@ -279,12 +299,14 @@ function App() {
                   </span>
                 </div>
                 <div className="list-box-buttons">
-                  <button className="remove-button"
+                  <button
+                    className="remove-button"
                     onClick={() => removerProduto(produto.id)}
                   >
                     <FaRegTrashAlt /> Remover
                   </button>
-                  <button className="edit-button"
+                  <button
+                    className="edit-button"
                     onClick={() => preparaEdicao(produto)}
                   >
                     <FaRegEdit /> Editar
@@ -308,7 +330,7 @@ function App() {
             />
           )}
         </div>
-      {/* )} */}
+      )}
     </div>
   );
 }

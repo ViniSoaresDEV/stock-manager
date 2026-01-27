@@ -9,11 +9,14 @@
   font-family: "Roboto", sans-serif;
 }
 
-.app-container{
+.app-container {
   background-color: rgba(126, 126, 126, 0.1);
   height: 100vh;
   display: flex;
-  width: 100%;
+  /* max-width: 100%; */
+  align-items: center;
+  justify-content: center;
+  /* overflow-x: hidden; */
 }
 
 .invetary-title {
@@ -24,17 +27,17 @@
   box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.estoque-container{
+.estoque-container {
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
 }
 
-.estoque-form{
+.estoque-form {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
@@ -42,10 +45,9 @@
   background-color: white;
   width: 100%;
   padding: 20px;
-  box-shadow: 3px 6px 8px rgba(0,0,0,0.2);
+  box-shadow: 3px 6px 8px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
 }
-
 
 .box {
   width: 100%;
@@ -97,10 +99,9 @@
   height: 400px;
   padding-right: 10px;
   overflow-y: scroll;
-  /* overflow-x: hidden; */
 }
 
-.list-box-buttons{
+.list-box-buttons {
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -125,6 +126,7 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   padding: 10px;
   margin-bottom: 15px;
   background-color: #ffffff;
@@ -132,25 +134,41 @@
   box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.list-box-div{
+.list-box-div {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 10px;
   width: 150px;
-  height: 70px;
+  height: 120px;
+  font-size: 20px;
+  word-wrap: break-word;
+}
+
+.list-box-div:nth-child(2) {
+  align-items: center;
+}
+
+.list-box-div span:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.valor-total-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  width: 150px;
+  height: 120px;
   font-size: 20px;
 }
 
-.valor-total-item{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  width: 150px;
-  height: 70px;
-  font-size: 20px;
-}
-
-.remove-button{
+.remove-button {
   margin-left: 10px;
   text-align: center;
   background-color: transparent;
@@ -160,139 +178,248 @@
   font-size: 18px;
   width: 100px;
 }
-.edit-button{
+.edit-button {
   margin-left: 10px;
   text-align: center;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #507CFF;
+  color: #507cff;
   font-size: 18px;
   width: 100px;
 }
 
-@media (min-width: 768px) and (max-width: 1024px){
+.list-box-buttons {
+  display: flex;
+  max-width: 250px;
+}
 
-  .header{
+.hamburger-menu,
+.close-menu {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .side-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 250px;
+    height: 100vh;
+    background-color: #222;
+    transition: left 0.3s ease-in-out;
+    z-index: 200;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .side-menu.aberto {
+    left: 0;
+  }
+
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    font-size: 24px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px;
+    background-color: #333;
+    cursor: pointer;
+  }
+
+  .close-menu {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .header {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .header h3{
+  .header h3 {
     font-size: 24px;
   }
 
-  .box{
+  .box {
     display: flex;
     justify-content: space-around;
   }
 
-  .add-btn{
+  .add-btn {
     width: 400px;
     align-self: center;
   }
 
-  .input-box input{
-    width: 160px;
+  .input-box input {
+    width: 180px;
   }
 
-  .input-box p{
+  .input-box p {
     font-size: 18px;
   }
 
-  .invetary-title{
+  .invetary-title {
     font-size: 26px;
     text-align: center;
   }
 
-  .list-box-div span{
+  .list-box {
+    display: flex;
+  }
+
+  .list-box-div span {
     font-size: 16px;
   }
 
-  .valor-total-item span{
+  .valor-total-item span {
     font-size: 16px;
   }
 
-  .remove-button, .edit-button{
+  .remove-button,
+  .edit-button {
     font-size: 16px;
   }
 
-
-
+  .list-box-buttons {
+    display: flex;
+    justify-content: center;
+    max-width: 200px;
+  }
 }
 
-@media (min-width: 320px) and (max-width: 420px){
-
-  .app-container{
-    height: 100%;
-  }
-
-  .header{
+@media (max-width: 768px) {
+  .header {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .header h3{
-    font-size: 18px;
+  .header h3 {
+    font-size: 24px;
   }
 
-  .header span{
-    font-size: 16px;
-    text-align: center;
-  }
-
-  .box{
+  .box {
     display: flex;
     flex-direction: column;
   }
 
-  .add-btn{
-    width: 100px;
+  .add-btn {
+    width: 400px;
     align-self: center;
   }
 
-  .input-box input{
+  .input-box input {
     width: 100%;
     margin-bottom: 15px;
   }
 
-  .input-box p{
-    font-size: 16px;
+  .list-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .invetary-title{
-    font-size: 26px;
+  .list-box-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .list-box-buttons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .valor-total-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    height: 100%;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header h3 {
+    font-size: 18px;
+  }
+
+  .header span {
+    font-size: 16px;
     text-align: center;
   }
 
-  .list-box{
+  .box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100px;
+    align-self: center;
+  }
+
+  .input-box input {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .input-box p {
+    font-size: 16px;
+  }
+
+  .invetary-title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .list-box {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
   }
 
-  .list-box-div{
+  .list-box-div {
     display: flex;
     flex-direction: column;
     gap: 10px;
     align-items: center;
   }
 
-  .list-box-div span{
+  .list-box-div span {
     font-size: 16px;
   }
 
-  .valor-total-item span{
+  .valor-total-item span {
     font-size: 16px;
     text-align: center;
   }
 
-  .remove-button, .edit-button{
+  .remove-button,
+  .edit-button {
     font-size: 16px;
   }
-
-  
 }
