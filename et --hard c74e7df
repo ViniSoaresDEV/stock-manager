@@ -1,0 +1,35 @@
+[33m58a9c48[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/responsivity[m[33m)[m HEAD@{0}: reset: moving to 58a9c48
+[33mc74e7df[m[33m ([m[1;31morigin/feature/responsivity[m[33m)[m HEAD@{1}: checkout: moving from main to feature/responsivity
+[33mcf3dc54[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{2}: checkout: moving from feature/responsivity to main
+[33mc74e7df[m[33m ([m[1;31morigin/feature/responsivity[m[33m)[m HEAD@{3}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m58a9c48[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/responsivity[m[33m)[m HEAD@{4}: checkout: moving from main to feature/responsivity
+[33meb23f19[m HEAD@{5}: checkout: moving from feature/responsivity to main
+[33m58a9c48[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/responsivity[m[33m)[m HEAD@{6}: checkout: moving from main to feature/responsivity
+[33meb23f19[m HEAD@{7}: commit: Specific adjustments
+[33mc62952b[m HEAD@{8}: commit: Update Login.css
+[33mfcdb297[m HEAD@{9}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m2e4b775[m HEAD@{10}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m468d9ef[m HEAD@{11}: commit: Change Fav Icon
+[33mf49f829[m HEAD@{12}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m539fb1a[m HEAD@{13}: checkout: moving from feature/login-screen to main
+[33m4a6dc80[m[33m ([m[1;31morigin/feature/login-screen[m[33m, [m[1;32mfeature/login-screen[m[33m)[m HEAD@{14}: commit: API Conection
+[33m35d1a49[m HEAD@{15}: commit: Navigating between screens
+[33md6ad3c9[m HEAD@{16}: commit: Update App.css
+[33mbd14ad8[m HEAD@{17}: commit: Update Login.jsx
+[33m71bef3c[m HEAD@{18}: commit: First commit of login screen
+[33m539fb1a[m HEAD@{19}: checkout: moving from main to feature/login-screen
+[33m539fb1a[m HEAD@{20}: checkout: moving from feature/side-menu to main
+[33m73cb205[m[33m ([m[1;31morigin/feature/side-menu[m[33m, [m[1;32mfeature/side-menu[m[33m)[m HEAD@{21}: checkout: moving from main to feature/side-menu
+[33md3f614b[m HEAD@{22}: checkout: moving from feature/side-menu to main
+[33m73cb205[m[33m ([m[1;31morigin/feature/side-menu[m[33m, [m[1;32mfeature/side-menu[m[33m)[m HEAD@{23}: reset: moving to HEAD
+[33m73cb205[m[33m ([m[1;31morigin/feature/side-menu[m[33m, [m[1;32mfeature/side-menu[m[33m)[m HEAD@{24}: commit: Side Menu
+[33md3f614b[m HEAD@{25}: checkout: moving from main to feature/side-menu
+[33md3f614b[m HEAD@{26}: commit: Update App.jsx
+[33m5b8072e[m HEAD@{27}: checkout: moving from feature/total-value-stock to main
+[33m13b4f0e[m[33m ([m[1;31morigin/feature/total-value-stock[m[33m, [m[1;32mfeature/total-value-stock[m[33m)[m HEAD@{28}: commit: Feature: Total value of inventory
+[33m845f90e[m HEAD@{29}: checkout: moving from main to feature/total-value-stock
+[33m845f90e[m HEAD@{30}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m1983bd2[m HEAD@{31}: commit: Edit CSS
+[33m26f9c98[m HEAD@{32}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m7676d6c[m HEAD@{33}: commit: First Commit of Sotck Manager App
+[33m2d7dc71[m HEAD@{34}: commit (initial): Initial commit
