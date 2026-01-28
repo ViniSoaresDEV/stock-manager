@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import "./App.css";
-import { FaRegTrashAlt, FaRegEdit, FaBars } from "react-icons/fa";
-import ModalEditar from "./components/ModalEditar/ModalEditar";
-import SideMenu from "./components/Side Menu/SideMenu";
-import Login from "./components/Login/Login";
+import { useState, useEffect } from 'react';
+import './App.css';
+import { FaRegTrashAlt, FaRegEdit, FaBars } from 'react-icons/fa';
+import ModalEditar from './components/ModalEditar/ModalEditar';
+import SideMenu from './components/Side Menu/SideMenu';
+import Login from './components/Login/Login';
+import Budget from './components/Budget/Buget';
 
 function App() {
   // -------------------------------------------------
@@ -12,24 +13,24 @@ function App() {
 
   // Estado de Login (Com persistência no LocalStorage)
   const [logado, setLogado] = useState(() => {
-    return localStorage.getItem("logado") === "sim";
+    return localStorage.getItem('logado') === 'sim';
   });
 
   // Função para efetuar o login (passaremos para o componente Login)
   const handleLogin = () => {
     setLogado(true);
-    localStorage.setItem("logado", "sim");
+    localStorage.setItem('logado', 'sim');
   };
 
   const handleLogout = () => {
     setLogado(false);
     setMenuAberto(!menuAberto);
-    localStorage.setItem("logado", "nao");
+    localStorage.setItem('logado', 'nao');
   };
 
   // Estado de Produtos
   const [produtos, setProdutos] = useState([]);
-  const API_URL = "https://696fc18ba06046ce6187c5cc.mockapi.io/produtos";
+  const API_URL = 'https://696fc18ba06046ce6187c5cc.mockapi.io/produtos';
 
   async function buscarProduto() {
     try {
@@ -41,7 +42,7 @@ function App() {
         setProdutos(dados);
       }
     } catch (erro) {
-      console.error("Erro ao buscar produtos.", erro);
+      console.error('Erro ao buscar produtos.', erro);
     }
   }
 
@@ -50,24 +51,24 @@ function App() {
 
     const intervalo = setInterval(() => {
       buscarProduto();
-      console.log("buscando produtos...");
+      console.log('buscando produtos...');
     }, 10000);
 
     return () => clearInterval(intervalo);
   }, []);
 
   // Inputs
-  const [nomeProduto, setNomeProduto] = useState("");
-  const [quantidade, setQuantidade] = useState("");
-  const [precoProduto, setPrecoProduto] = useState("");
+  const [nomeProduto, setNomeProduto] = useState('');
+  const [quantidade, setQuantidade] = useState('');
+  const [precoProduto, setPrecoProduto] = useState('');
 
   // Variáveis de edição
   const [modalEdit, setModalEdit] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [editNomeProduto, setEditNomeProduto] = useState("");
-  const [editQuantidade, setEditQuantidade] = useState("");
-  const [editPreco, setEditPreco] = useState("");
-  const [paginaAtual, setPaginaAtual] = useState("estoque");
+  const [editNomeProduto, setEditNomeProduto] = useState('');
+  const [editQuantidade, setEditQuantidade] = useState('');
+  const [editPreco, setEditPreco] = useState('');
+  const [paginaAtual, setPaginaAtual] = useState('estoque');
 
   const [menuAberto, setMenuAberto] = useState(false); // variável de estado para mostrar/não mostrar o SideMenu
 
@@ -87,7 +88,7 @@ function App() {
     evento.preventDefault();
 
     if (!nomeProduto || !quantidade || !precoProduto) {
-      alert("Por favor, preencha todos os dados.");
+      alert('Por favor, preencha todos os dados.');
       return;
     }
 
@@ -99,8 +100,8 @@ function App() {
 
     try {
       const resposta = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(novoItem),
       });
 
@@ -109,27 +110,27 @@ function App() {
       setProdutos([...produtos, itemCriado]);
 
       // Limpa os inputs
-      setNomeProduto("");
-      setQuantidade("");
-      setPrecoProduto("");
+      setNomeProduto('');
+      setQuantidade('');
+      setPrecoProduto('');
     } catch (erro) {
-      alert("Erro ao adicionar produto.");
+      alert('Erro ao adicionar produto.');
       console.error(erro);
     }
   }
 
   async function removerProduto(idProduto) {
-    if (!confirm("Tem certeza que deseja remover?")) return;
+    if (!confirm('Tem certeza que deseja remover?')) return;
 
     try {
       await fetch(`${API_URL}/${idProduto}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       const novaLista = produtos.filter((item) => item.id !== idProduto);
       setProdutos(novaLista);
     } catch (erro) {
-      alert("Erro ao remover produto.");
+      alert('Erro ao remover produto.');
       console.error(erro);
     }
   }
@@ -138,7 +139,7 @@ function App() {
     evento.preventDefault();
 
     if (!editNomeProduto || !editQuantidade || !editPreco) {
-      alert("Por favor, preencha todos os campos.");
+      alert('Por favor, preencha todos os campos.');
       return;
     }
 
@@ -150,8 +151,8 @@ function App() {
 
     try {
       await fetch(`${API_URL}/${editId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(itemEditado),
       });
 
@@ -166,7 +167,7 @@ function App() {
       setProdutos(novaLista);
       setModalEdit(false);
     } catch (erro) {
-      alert("Erro ao salvar edição.");
+      alert('Erro ao salvar edição.');
       console.error(erro);
     }
   }
@@ -209,7 +210,7 @@ function App() {
       />
 
       {/* Condicional para mostrar o Estoque */}
-      {paginaAtual === "estoque" && (
+      {paginaAtual === 'estoque' && (
         <div className="estoque-container">
           <h1 className="invetary-title">Controle de Estoque</h1>
 
@@ -217,12 +218,12 @@ function App() {
             <div className="header">
               <h3>Novo Produto</h3>
               <span>
-                Valor total em estoque:{" "}
+                Valor total em estoque:{' '}
                 <strong>
-                  {" "}
-                  {valorTotal.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
+                  {' '}
+                  {valorTotal.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
                   })}
                 </strong>
               </span>
@@ -279,9 +280,9 @@ function App() {
                     <strong>Preço</strong>
                   </span>
                   <span>
-                    {Number(produto.preco).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
+                    {Number(produto.preco).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
                     })}
                   </span>
                 </div>
@@ -292,9 +293,9 @@ function App() {
                   <span>
                     {(
                       Number(produto.quantidade) * Number(produto.preco)
-                    ).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
+                    ).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
                     })}
                   </span>
                 </div>
@@ -331,6 +332,7 @@ function App() {
           )}
         </div>
       )}
+      {paginaAtual === 'orcamento' && <Budget />}
     </div>
   );
 }
