@@ -11,12 +11,12 @@
 
 .app-container {
   background-color: rgba(126, 126, 126, 0.1);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   /* max-width: 100%; */
-  align-items: center;
   justify-content: center;
   /* overflow-x: hidden; */
+  padding-left: 180px;
 }
 
 .invetary-title {
@@ -200,22 +200,6 @@
 }
 
 @media (max-width: 1024px) {
-  .side-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 250px;
-    height: 100vh;
-    background-color: #222;
-    transition: left 0.3s ease-in-out;
-    z-index: 200;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-  }
-
-  .side-menu.aberto {
-    left: 0;
-  }
-
   .hamburger-menu {
     display: block;
     position: fixed;
