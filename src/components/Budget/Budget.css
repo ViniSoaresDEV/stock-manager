@@ -85,7 +85,8 @@
 }
 
 .dados-cliente-input:nth-child(6),
-.dados-cliente-input:nth-child(7) {
+.dados-cliente-input:nth-child(7),
+.dados-cliente-input:nth-child(8) {
   justify-content: left;
 }
 
@@ -94,6 +95,10 @@
   padding: 6px;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.dados-cliente-input textarea {
+  width: 300px;
 }
 
 .buscar-produto-box {
