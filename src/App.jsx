@@ -52,7 +52,7 @@ function App() {
     const intervalo = setInterval(() => {
       buscarProduto();
       console.log('buscando produtos...');
-    }, 10000);
+    }, 30000);
 
     return () => clearInterval(intervalo);
   }, []);
