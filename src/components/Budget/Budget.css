@@ -84,8 +84,24 @@
   width: 20%;
 }
 
+.dados-cliente-endereco {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.dados-cliente-endereco input,
+.dados-cliente-endereco select {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  margin-left: 5px;
+}
+
 .dados-cliente-input:nth-child(6),
-.dados-cliente-input:nth-child(7) {
+.dados-cliente-input:nth-child(7),
+.dados-cliente-input:nth-child(8) {
   justify-content: left;
 }
 
@@ -94,6 +110,10 @@
   padding: 6px;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.dados-cliente-input textarea {
+  width: 300px;
 }
 
 .buscar-produto-box {
@@ -206,4 +226,112 @@
 .valor-total-resultado :nth-child(4) {
   border-top: 2px solid rgba(0, 0, 0, 0.2);
   padding-top: 10px;
+}
+
+
+@media (max-width: 768px){
+  .dados-cliente-input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dados-cliente-input input, .dados-cliente-input span{
+    width: 100%;
+  }
+
+  .dados-cliente-endereco{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .dados-cliente-endereco div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .dados-cliente-endereco div input{
+    width: 100%;
+  }
+
+  .dados-cliente-endereco div select{
+    max-width: 100px;
+  }
+
+  .dados-cliente-input textarea{
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .buscar-produto-input{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .buscar-produto-input span{
+    width: 100%;
+  }
+
+  .lista-produto{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-tabela{
+    display: none;
+  }
+
+  .corpo-tabela{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 15px 5px;
+  }
+
+  .corpo-tabela td{
+    font-size: 16px;
+  }
+
+  .corpo-tabela td input{
+    height: 40px;
+    text-align: center;
+  }
+
+  .corpo-tabela textarea{
+    width: 100%;
+  }
+
+  .valor-total-input{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 5px;
+  }
+
+  .valor-total-input div{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .valor-total-input input{
+    margin: 0;
+    max-width: 120px;
+  }
+
+  .pdf-btn{
+    width: 200px;
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 425px){
+  .orcamento-container{
+    padding-top: 80px;
+  }
 }

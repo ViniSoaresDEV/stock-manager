@@ -12,6 +12,17 @@ function App() {
   // -------------------------------------------------
 
   // Estado de Login (Com persistência no LocalStorage)
+  const [loginAdm, setLoginAdm] = useState(false);
+
+  // Verificando acesso ADM para liberar edição do conteúdo do estoque
+  const isAdm = (user) => {
+    if (user !== 'adm') {
+      setLoginAdm(true);
+    } else {
+      setLoginAdm(false);
+    }
+  };
+
   const [logado, setLogado] = useState(() => {
     return localStorage.getItem('logado') === 'sim';
   });
@@ -52,7 +63,7 @@ function App() {
     const intervalo = setInterval(() => {
       buscarProduto();
       console.log('buscando produtos...');
-    }, 10000);
+    }, 30000);
 
     return () => clearInterval(intervalo);
   }, []);
@@ -185,7 +196,7 @@ function App() {
   // -------------------------------------------------
 
   if (!logado) {
-    return <Login onLogin={handleLogin} />;
+    return <Login onLogin={handleLogin} adm={isAdm} />;
   }
 
   // -------------------------------------------------
@@ -254,7 +265,7 @@ function App() {
                 />
               </div>
             </div>
-            <button type="submit" className="add-btn">
+            <button type="submit" className="add-btn" disabled={loginAdm}>
               Adicionar
             </button>
           </form>
@@ -301,12 +312,14 @@ function App() {
                 </div>
                 <div className="list-box-buttons">
                   <button
+                    disabled={loginAdm}
                     className="remove-button"
                     onClick={() => removerProduto(produto.id)}
                   >
                     <FaRegTrashAlt /> Remover
                   </button>
                   <button
+                    disabled={loginAdm}
                     className="edit-button"
                     onClick={() => preparaEdicao(produto)}
                   >
