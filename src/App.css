@@ -11,12 +11,12 @@
 
 .app-container {
   background-color: rgba(126, 126, 126, 0.1);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   /* max-width: 100%; */
-  align-items: center;
   justify-content: center;
   /* overflow-x: hidden; */
+  padding-left: 180px;
 }
 
 .invetary-title {
@@ -96,7 +96,7 @@
   gap: 10px;
   margin-top: 30px;
   width: 100%;
-  max-height: 250px;
+  max-height: 380px;
   padding-right: 10px;
   overflow-y: scroll;
 }
@@ -141,7 +141,7 @@
   gap: 10px;
   width: 150px;
   height: 120px;
-  font-size: 20px;
+  font-size: 18px;
   word-wrap: break-word;
 }
 
@@ -165,7 +165,7 @@
   gap: 10px;
   width: 150px;
   height: 120px;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .remove-button {
@@ -200,22 +200,10 @@
 }
 
 @media (max-width: 1024px) {
-  .side-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 250px;
-    height: 100vh;
-    background-color: #222;
-    transition: left 0.3s ease-in-out;
-    z-index: 200;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  .app-container {
+    height: 100%;
+    padding-left: 0;
   }
-
-  .side-menu.aberto {
-    left: 0;
-  }
-
   .hamburger-menu {
     display: block;
     position: fixed;
@@ -301,6 +289,11 @@
 }
 
 @media (max-width: 768px) {
+  .app-container {
+    height: 100%;
+    padding-left: 0;
+  }
+
   .header {
     display: flex;
     flex-direction: column;
@@ -328,7 +321,8 @@
 
   .list-box {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
   }
 
@@ -354,6 +348,7 @@
 @media (max-width: 480px) {
   .app-container {
     height: 100%;
+    padding-left: 0;
   }
 
   .header {
