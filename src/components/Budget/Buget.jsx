@@ -1,6 +1,7 @@
 import './Budget.css';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { FaRegTrashAlt, FaTrashAlt } from 'react-icons/fa';
+import logo from '../../assets/img/bellano-logo.png';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -42,6 +43,9 @@ function Budget() {
     email: '',
     telefone: '',
     endereco: '',
+    bairro: '',
+    cep: '',
+    uf: '',
   });
 
   const valorTotal = Array.isArray(itensOrcamento)
@@ -84,6 +88,21 @@ function Budget() {
     setCliente({ ...cliente, endereco: enderecoDigitado });
   }
 
+  function clienteBairro(evento) {
+    const bairroDigitado = evento.target.value;
+    setCliente({ ...cliente, bairro: bairroDigitado });
+  }
+
+  function clienteCEP(evento) {
+    const cepDigitado = evento.target.value;
+    setCliente({ ...cliente, cep: cepDigitado });
+  }
+
+  function clienteUF(evento) {
+    const ufDigitado = evento.target.value;
+    setCliente({ ...cliente, uf: ufDigitado });
+  }
+
   function buscarEAdicionar() {
     if (!termoBuscado) return alert('Por favor, digite o nome do produto.');
 
@@ -92,7 +111,6 @@ function Budget() {
         .toLocaleLowerCase()
         .includes(termoBuscado.toLocaleLowerCase()),
     );
-    console.log(termoEncontrado);
 
     if (termoEncontrado) {
       adicionarAoOrcamento(termoEncontrado);
@@ -133,94 +151,310 @@ function Budget() {
   }
 
   function gerarPDF() {
+    // --- 1. VALIDAÇÕES (Segurança antes de começar) ---
     if (!formaPagamento || formaPagamento === '') {
       alert('Por favor, selecione a forma de pagamento!');
       return;
     }
-
-    if (!vendedor || vendedor === '') {
+    if (!vendedor || vendedor === '' || vendedor === '0') {
       alert('Por favor, selecione o vendedor!');
       return;
     }
 
+    // --- 2. CONFIGURAÇÕES INICIAIS ---
     const doc = new jsPDF();
-    const data = new Date();
 
-    const dia = data.getDate();
-    const mes = data.getMonth() + 1;
-    const ano = data.getFullYear();
+    // Cores da Marca (Roxo e Cinza)
+    const colorPurple = [93, 64, 120];
+    const colorGray = [240, 240, 240];
+    const marginX = 15;
+    let currentY = 0; // Nosso cursor vertical
 
-    //Cabeçalho
-    doc.setFontSize(18);
-    doc.text('Orçamento - Bellano Móveis', 105, 20, null, null, 'center');
+    // Datas
+    const dataAtual = new Date();
+    const dataFormatada = dataAtual.toLocaleDateString('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
 
-    //Dados cliente
-    doc.setFontSize(12);
-    doc.text(`Cliente: ${cliente.nome}`, 20, 40);
-    doc.text(`CPF / CNPJ: ${cliente.documento}`, 20, 50);
-    doc.text(`Email: ${cliente.email}`, 20, 60);
-    doc.text(`Telefone: ${cliente.telefone}`, 20, 70);
-    doc.text(`Endereço: ${cliente.endereco}`, 20, 80);
+    // ===================================================
+    // BLOCO 1: CABEÇALHO (Igual ao da foto)
+    // ===================================================
 
-    //Tabela de dados
+    // Lado Esquerdo: Marca (Aqui idealmente iria doc.addImage com a logo)
+    doc.setFontSize(24);
+    doc.setTextColor(...colorPurple);
+    doc.setFont('helvetica', 'bold');
+    doc.addImage(logo, marginX, 12, 45, 15);
+
+    // Lado Direito: Box Cinza de Contato
+    doc.setFillColor(...colorGray);
+    doc.rect(100, 10, 95, 25, 'F'); // Fundo cinza
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.text('21 3083-9402 | 97045-5771', 105, 20);
+    doc.text('www.bellanomoveis.com.br', 105, 24);
+    doc.text('contato@bellanomoveis.com.br', 105, 28);
+
+    doc.text('Rua Cuba, 379 - Sobreloja', 150, 20);
+    doc.text('Penha Circular - CEP 21020-160', 150, 24);
+    doc.text('Rio de Janeiro - RJ', 150, 28);
+
+    currentY = 40; // Desce o cursor
+
+    // ===================================================
+    // BLOCO 2: VENDEDOR E DATA
+    // ===================================================
+
+    // Barra Roxa do Vendedor
+    doc.setFillColor(...colorPurple);
+    doc.rect(marginX, currentY, 130, 7, 'F');
+
+    doc.setTextColor(255, 255, 255); // Branco
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    // AQUI ENTRA O SEU VENDEDOR SELECIONADO
+    doc.text(`Vendedor: ${vendedor.toUpperCase()}`, marginX + 3, currentY + 5);
+
+    // Box do Pedido (Direita)
+    doc.setDrawColor(0, 0, 0); // Borda preta
+    doc.rect(150, currentY - 3, 45, 10);
+    doc.line(172, currentY - 3, 172, currentY + 7); // Divisória vertical
+    doc.line(150, currentY + 2, 195, currentY + 2); // Divisória horizontal
+
+    doc.setTextColor(0, 0, 0); // Preto
+    doc.setFontSize(7);
+    doc.text('Pedido nº', 152, currentY + 1);
+    doc.text('Orçamento nº', 174, currentY + 1);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${dataAtual.getFullYear()}/${10}`, 152, currentY + 6); // Exemplo de número
+
+    currentY += 10;
+
+    // ===================================================
+    // BLOCO 3: DADOS DO CLIENTE (O Grid Perfeito)
+    // ===================================================
+
+    // Funçãozinha auxiliar para não repetir código de desenhar quadrado
+    const drawField = (label, value, x, y, width) => {
+      doc.rect(x, y, width, 6); // Desenha borda
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text(label, x + 1, y + 4); // Rótulo
+      doc.setFont('helvetica', 'bold');
+      doc.text(value ? String(value).substring(0, 35) : '', x + 20, y + 4); // Valor (corta se for gigante)
+    };
+
+    // Linha 1: Nome e IE (deixei IE em branco pois não tem no form)
+    drawField('Cliente:', cliente.nome, marginX, currentY, 120);
+    drawField('IE:', '', marginX + 120, currentY, 60);
+    currentY += 6;
+
+    // Linha 2: Documento (CPF/CNPJ) e UF
+    drawField('CNPJ/CPF:', cliente.documento, marginX, currentY, 120);
+    drawField('UF:', cliente.uf, marginX + 120, currentY, 60);
+    currentY += 6;
+
+    // Linha 3: Endereço e CEP
+    drawField('Endereço:', cliente.endereco, marginX, currentY, 120);
+    drawField('CEP:', cliente.cep, marginX + 120, currentY, 60);
+    currentY += 6;
+
+    // Linha 4: Bairro e Telefone
+    drawField('Bairro:', cliente.bairro, marginX, currentY, 120);
+    drawField('TEL:', cliente.telefone, marginX + 120, currentY, 60);
+    currentY += 6;
+
+    // Linha 5: Email
+    drawField('Email:', cliente.email, marginX, currentY, 180);
+    currentY += 10; // Espaço antes da tabela
+
+    // ===================================================
+    // BLOCO 4: TABELA DE PRODUTOS
+    // ===================================================
+
     const tabelaDados = itensOrcamento.map((item) => [
-      item.nome,
-      item.quantidade,
+      item.quantidade, // Coluna UN
+      item.nome, // Coluna Produto
+      item.observacao, // Coluna Cor (Fixo por enquanto)
       item.preco.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       }),
-      item.observacao,
       (item.preco * item.quantidade).toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       }),
     ]);
 
-    //Gerando tabela com o AutoTable
     autoTable(doc, {
-      head: [['Produto', 'Qtd', 'Valor Un.', 'Obs', 'Total']],
+      startY: currentY,
+      head: [['UN', 'PRODUTO', 'COR/DETALHE', 'VALOR UN', 'VALOR']],
       body: tabelaDados,
-      startY: 95,
-      theme: 'grid', //Layout em grade
+      theme: 'grid',
+      headStyles: {
+        fillColor: [160, 160, 160],
+        textColor: [0, 0, 0],
+        halign: 'center',
+        fontSize: 8,
+      },
+      columnStyles: {
+        0: { halign: 'center', cellWidth: 10 },
+        3: { halign: 'right' },
+        4: { halign: 'right', fontStyle: 'bold' },
+      },
+      styles: { fontSize: 8 },
     });
 
-    //Pegando onde a linha parou e adicionando mais 10
-    const finalY = doc.lastAutoTable.finalY;
+    let finalY = doc.lastAutoTable.finalY;
 
-    doc.setFontSize(12);
+    // ===================================================
+    // BLOCO 5: TOTAIS (Subtotal, Desconto, Frete, Total)
+    // ===================================================
+
+    // Verifica se precisa de nova página para os totais
+    if (finalY > 230) {
+      doc.addPage();
+      finalY = 20;
+    }
+
+    const larguraBox = 59;
+    const xBox = 136.55; // Posição horizontal dos boxes de total
+
+    // 1. Subtotal
+    doc.rect(xBox, finalY, larguraBox, 6);
+    doc.text('SUBTOTAL', xBox + 2, finalY + 4);
     doc.text(
-      `SUBTOTAL: ${valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
-      140,
+      valorTotal.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }),
+      xBox + larguraBox - 2,
+      finalY + 4,
+      { align: 'right' },
+    );
+
+    // 2. Desconto (Só mostra se tiver)
+    doc.rect(xBox, finalY + 6, larguraBox, 6);
+    doc.text(`Desconto (${desconto || 0}%)`, xBox + 2, finalY + 10);
+    doc.setTextColor(200, 0, 0); // Vermelho para desconto
+    doc.text(
+      `- ${Number(calculoDesconto).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+      xBox + larguraBox - 2,
       finalY + 10,
+      { align: 'right' },
     );
+    doc.setTextColor(0, 0, 0); // Volta pra preto
 
+    // 3. Frete
+    doc.rect(xBox, finalY + 12, larguraBox, 6);
+    doc.text('Frete', xBox + 2, finalY + 16);
     doc.text(
-      `Desconto ${desconto}%: ${calculoDesconto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
-      140,
-      finalY + 20,
+      `+ ${Number(frete).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+      xBox + larguraBox - 2,
+      finalY + 16,
+      { align: 'right' },
     );
 
+    // 4. TOTAL FINAL (Azulzinho destaque)
+    doc.setFillColor(180, 200, 210);
+    doc.rect(xBox, finalY + 18, larguraBox, 8, 'F');
+    doc.rect(xBox, finalY + 18, larguraBox, 8); // Borda
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL A PAGAR', xBox + 2, finalY + 23);
     doc.text(
-      `Frete: ${Number(frete).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
-      140,
-      finalY + 30,
+      valorTotalFinal.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }),
+      xBox + larguraBox - 2,
+      finalY + 23,
+      { align: 'right' },
     );
 
-    doc.setFontSize(14);
+    // Data por extenso no centro
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'italic');
+    doc.line(70, finalY + 36, 140, finalY + 35);
+    doc.text(`Rio de Janeiro, ${dataFormatada}`, 105, finalY + 39, {
+      align: 'center',
+    });
+
+    // ===================================================
+    // BLOCO 6: RODAPÉ (Condições e Observações)
+    // ===================================================
+
+    let footerY = finalY + 45;
+
+    // Condições de Pagamento
+    doc.setFillColor(...colorPurple);
+    doc.rect(marginX, footerY, 90, 5, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Condições de pagamento', marginX + 2, footerY + 3.5);
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Forma: ${formaPagamento}`, marginX, footerY + 10);
+    doc.text(`Observações: ${condicaoPagamento}`, marginX, footerY + 15);
+
+    // Observações
+    doc.setFillColor(...colorPurple);
+    doc.rect(marginX, footerY + 20, 90, 5, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Observações', marginX + 2, footerY + 23.5);
+
+    doc.setTextColor(150, 50, 50); // Cor de alerta
+    doc.setFont('helvetica', 'italic');
+    // Se tiver observação no item, mostra aqui, ou uma obs geral
+    doc.text('Validade da proposta: 10 dias.', marginX, footerY + 30);
     doc.text(
-      `Valor Total: ${valorTotalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
-      140,
-      finalY + 40,
+      'Não realizamos instalação hidraulica e o lavatório não acompanha aquecedor elétrico.',
+      marginX,
+      footerY + 35,
+    );
+    doc.setFontSize(10);
+    doc.setTextColor(200, 20, 20);
+    doc.text('Informações importantes', marginX, footerY + 45);
+    doc.setFontSize(8);
+    doc.setTextColor(0, 0, 0);
+    doc.text(
+      `Prazo: este é contabilizado mediante a data de pagamento e assinatura do pedido, salvo quando existem itens sob medida ou
+      detalhes que impeçam a produção por dependerem de informações fornecidas pelo cliente, nestes casos, tais itens terão prazo
+      postergado e será contabilizado a partir da definição dessas informações.`,
+      marginX,
+      footerY + 50,
+    );
+    doc.text(
+      `Entrega: por escadas ou de difícil acesso até o 3° andar, deverá ser tomada a conferência do produto no piso térreo pelo
+      responsável do recebimento. Acima do 3° andar, será avaliada a cobrança da taxa extra e revalidação do prazo de entrega mediante
+      disponibilidade da equipe de frete.`,
+      marginX,
+      footerY + 62,
     );
 
-    doc.setFontSize(12);
-    doc.text(`Vendedor: ${vendedor}`, 18, finalY + 60);
-    doc.text(`Forma de pagamento: ${formaPagamento}`, 18, finalY + 70);
-    doc.text(`Condição de pagamento: ${condicaoPagamento}`, 18, finalY + 80);
+    doc.setFillColor(160, 160, 160);
+    doc.rect(0, 280, 210, 8, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'GMZ Indústria e Comércio de Móveis LTDA | CNPJ 29.267.422/0001-00',
+      105,
+      284.5,
+      {
+        align: 'center',
+      },
+    );
 
-    //Salva o PDF
-    doc.save(`orçamento_${cliente.nome}_${dia}-${mes}-${ano}.pdf`);
+    // Salvar
+    const nomeArquivo = `orcamento_${cliente.nome.replace(/ /g, '_')}_${dataAtual.getDate()}-${dataAtual.getMonth() + 1}.pdf`;
+    doc.save(nomeArquivo);
   }
 
   return (
@@ -276,23 +510,74 @@ function Budget() {
                     required
                   />
                 </div>
-                <div className="dados-cliente-input">
-                  <span>Endereço: </span>{' '}
-                  <input
-                    type="text"
-                    onChange={enderecoCliente}
-                    value={cliente.endereco}
-                    required
-                  />
+                <div className="dados-cliente-endereco">
+                  <div>
+                    <span>Endereço: </span>{' '}
+                    <input
+                      type="text"
+                      onChange={enderecoCliente}
+                      value={cliente.endereco}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <span>Bairro: </span>
+                    <input
+                      type="text"
+                      onChange={clienteBairro}
+                      value={cliente.bairro}
+                    />
+                  </div>
+                  <div>
+                    <span>CEP: </span>
+                    <input
+                      type="text"
+                      onChange={clienteCEP}
+                      value={cliente.cep}
+                    />
+                  </div>
+                  <div>
+                    <span>UF:</span>
+                    <select name="uf" onChange={clienteUF} value={cliente.uf}>
+                      <option value="">UF</option>
+                      <option value="AC">AC</option>
+                      <option value="AL">AL</option>
+                      <option value="AP">AP</option>
+                      <option value="AM">AM</option>
+                      <option value="BA">BA</option>
+                      <option value="CE">CE</option>
+                      <option value="DF">DF</option>
+                      <option value="ES">ES</option>
+                      <option value="GO">GO</option>
+                      <option value="MA">MA</option>
+                      <option value="MT">MT</option>
+                      <option value="MS">MS</option>
+                      <option value="MG">MG</option>
+                      <option value="PA">PA</option>
+                      <option value="PB">PB</option>
+                      <option value="PR">PR</option>
+                      <option value="PE">PE</option>
+                      <option value="PI">PI</option>
+                      <option value="RJ">RJ</option>
+                      <option value="RN">RN</option>
+                      <option value="RS">RS</option>
+                      <option value="RO">RO</option>
+                      <option value="RR">RR</option>
+                      <option value="SC">SC</option>
+                      <option value="SP">SP</option>
+                      <option value="SE">SE</option>
+                      <option value="TO">TO</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="dados-cliente-input">
                   <span>Vendedor: </span>{' '}
                   <select onChange={(e) => setVendedor(e.target.value)}>
                     <option value="">Selecionar vendedor</option>
-                    <option value="Raquel">Raquel</option>
-                    <option value="Thays">Thays</option>
+                    <option value="Raquel Passos">Raquel Passos</option>
+                    <option value="Thays Rianelli">Thays Rianelli</option>
                     <option value="Aldeir">Aldeir</option>
-                    <option value="Eduardo">Eduardo</option>
+                    <option value="Eduardo Gimenez">Eduardo Gimenez</option>
                   </select>
                 </div>
                 <div className="dados-cliente-input">
