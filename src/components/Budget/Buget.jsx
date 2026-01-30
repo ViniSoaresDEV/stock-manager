@@ -576,7 +576,7 @@ function Budget() {
                     <option value="">Selecionar vendedor</option>
                     <option value="Raquel Passos">Raquel Passos</option>
                     <option value="Thays Rianelli">Thays Rianelli</option>
-                    <option value="Aldeir">Aldeir</option>
+                    <option value="Aldeir Gonçalves">Aldeir Gonçalves</option>
                     <option value="Eduardo Gimenez">Eduardo Gimenez</option>
                   </select>
                 </div>
@@ -615,7 +615,7 @@ function Budget() {
                     <table
                       style={{ width: '100%', borderCollapse: 'collapse' }}
                     >
-                      <thead>
+                      <thead className='header-tabela'>
                         <tr
                           style={{
                             borderBottom: '2px solid #eee',
@@ -632,7 +632,7 @@ function Budget() {
                       </thead>
                       <tbody>
                         {itensOrcamento.map((item) => (
-                          <tr
+                          <tr className='corpo-tabela'
                             key={item.id}
                             style={{ borderBottom: '1px solid #eee' }}
                           >
@@ -738,7 +738,7 @@ function Budget() {
               </div>
             </div>
             <button className="pdf-btn" onClick={gerarPDF}>
-              Gerar PDF do Orçamento
+              Gerar PDF
             </button>
           </div>
         </>
