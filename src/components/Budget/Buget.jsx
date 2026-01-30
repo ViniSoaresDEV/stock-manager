@@ -7,25 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 function Budget() {
-  const produtosDisponiveis = [
-    { id: 1, nome: 'Cadeira New Roma Fixa C/ Cabeçote', preco: 1998 },
-    { id: 2, nome: 'Cadeira Style Capone', preco: 4189 },
-    {
-      id: 3,
-      nome: 'Armário Auxiliar de Lavatório Superior - Branco',
-      preco: 796,
-    },
-    { id: 4, nome: 'Lavatório New Roma', preco: 3629 },
-    { id: 5, nome: 'Lavatório Studio', preco: 3299 },
-    { id: 6, nome: 'Bancada Profissional Dupla Face 4 Estações', preco: 9448 },
-    {
-      id: 7,
-      nome: 'Armário Auxiliar de Lavatório Inferior - Branco',
-      preco: 982,
-    },
-    { id: 8, nome: 'Cadeira New Roma Reclinável', preco: 2459 },
-    { id: 9, nome: 'Lavatório New Roma C/ Descanso de Pernas', preco: 4069 },
-  ];
+  const API_URL = 'https://696fc18ba06046ce6187c5cc.mockapi.io/itens';
 
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
 
@@ -103,10 +85,13 @@ function Budget() {
     setCliente({ ...cliente, uf: ufDigitado });
   }
 
-  function buscarEAdicionar() {
+  async function buscarEAdicionar() {
     if (!termoBuscado) return alert('Por favor, digite o nome do produto.');
 
-    const termoEncontrado = produtosDisponiveis.find((produto) =>
+    const resposta = await fetch(API_URL);
+    const data = await resposta.json();
+
+    const termoEncontrado = data.find((produto) =>
       produto.nome
         .toLocaleLowerCase()
         .includes(termoBuscado.toLocaleLowerCase()),
@@ -615,7 +600,7 @@ function Budget() {
                     <table
                       style={{ width: '100%', borderCollapse: 'collapse' }}
                     >
-                      <thead className='header-tabela'>
+                      <thead className="header-tabela">
                         <tr
                           style={{
                             borderBottom: '2px solid #eee',
@@ -632,7 +617,8 @@ function Budget() {
                       </thead>
                       <tbody>
                         {itensOrcamento.map((item) => (
-                          <tr className='corpo-tabela'
+                          <tr
+                            className="corpo-tabela"
                             key={item.id}
                             style={{ borderBottom: '1px solid #eee' }}
                           >
