@@ -18,6 +18,7 @@ function Budget() {
   const [vendedor, setVendedor] = useState('');
   const [formaPagamento, setFormaPagamento] = useState('');
   const [condicaoPagamento, setCondicaoPagamento] = useState('');
+  const [prazoPagamento, setPrazoPagamento] = useState('');
 
   const [cliente, setCliente] = useState({
     nome: '',
@@ -388,25 +389,37 @@ function Budget() {
     doc.text(`Forma: ${formaPagamento}`, marginX, footerY + 10);
     doc.text(`Observações: ${condicaoPagamento}`, marginX, footerY + 15);
 
-    // Observações
+    // Prazo
     doc.setFillColor(...colorPurple);
-    doc.rect(marginX, footerY + 20, 90, 5, 'F');
+    doc.rect(marginX, footerY + 24, 90, 5, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
-    doc.text('Observações', marginX + 2, footerY + 23.5);
+    doc.text('Prazo', marginX + 2, footerY + 27.5);
 
     doc.setTextColor(150, 50, 50); // Cor de alerta
     doc.setFont('helvetica', 'italic');
     // Se tiver observação no item, mostra aqui, ou uma obs geral
-    doc.text('Validade da proposta: 10 dias.', marginX, footerY + 30);
+    doc.text(`${prazoPagamento} dias corridos.`, marginX, footerY + 34);
+
+    // Observações
+    doc.setFillColor(...colorPurple);
+    doc.rect(marginX, footerY + 41, 90, 5, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Observações', marginX + 2, footerY + 44.5);
+
+    doc.setTextColor(150, 50, 50); // Cor de alerta
+    doc.setFont('helvetica', 'italic');
+    // Se tiver observação no item, mostra aqui, ou uma obs geral
+    doc.text('Validade da proposta: 10 dias.', marginX, footerY + 51);
     doc.text(
       'Não realizamos instalação hidraulica e o lavatório não acompanha aquecedor elétrico.',
       marginX,
-      footerY + 35,
+      footerY + 56,
     );
     doc.setFontSize(10);
     doc.setTextColor(200, 20, 20);
-    doc.text('Informações importantes', marginX, footerY + 45);
+    doc.text('Informações importantes', marginX, footerY + 65);
     doc.setFontSize(8);
     doc.setTextColor(0, 0, 0);
     doc.text(
@@ -414,24 +427,24 @@ function Budget() {
       detalhes que impeçam a produção por dependerem de informações fornecidas pelo cliente, nestes casos, tais itens terão prazo
       postergado e será contabilizado a partir da definição dessas informações.`,
       marginX,
-      footerY + 50,
+      footerY + 69,
     );
     doc.text(
       `Entrega: por escadas ou de difícil acesso até o 3° andar, deverá ser tomada a conferência do produto no piso térreo pelo
       responsável do recebimento. Acima do 3° andar, será avaliada a cobrança da taxa extra e revalidação do prazo de entrega mediante
       disponibilidade da equipe de frete.`,
       marginX,
-      footerY + 62,
+      footerY + 81,
     );
 
     doc.setFillColor(160, 160, 160);
-    doc.rect(0, 280, 210, 8, 'F');
+    doc.rect(0, 290, 210, 8, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.text(
       'GMZ Indústria e Comércio de Móveis LTDA | CNPJ 29.267.422/0001-00',
       105,
-      284.5,
+      294.5,
       {
         align: 'center',
       },
@@ -580,6 +593,13 @@ function Budget() {
                   <textarea
                     onChange={(e) => setCondicaoPagamento(e.target.value)}
                   ></textarea>
+                </div>
+                <div className="dados-cliente-input">
+                  <span>Prazo de entrega (dias corridos):</span>
+                  <input
+                    type="number"
+                    onChange={(e) => setPrazoPagamento(e.target.value)}
+                  ></input>
                 </div>
               </div>
             </div>

@@ -101,7 +101,8 @@
 
 .dados-cliente-input:nth-child(6),
 .dados-cliente-input:nth-child(7),
-.dados-cliente-input:nth-child(8) {
+.dados-cliente-input:nth-child(8),
+.dados-cliente-input:nth-child(9) {
   justify-content: left;
 }
 
@@ -228,64 +229,64 @@
   padding-top: 10px;
 }
 
-
-@media (max-width: 768px){
+@media (max-width: 768px) {
   .dados-cliente-input {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .dados-cliente-input input, .dados-cliente-input span{
+  .dados-cliente-input input,
+  .dados-cliente-input span {
     width: 100%;
   }
 
-  .dados-cliente-endereco{
+  .dados-cliente-endereco {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
 
-  .dados-cliente-endereco div{
+  .dados-cliente-endereco div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
   }
 
-  .dados-cliente-endereco div input{
+  .dados-cliente-endereco div input {
     width: 100%;
   }
 
-  .dados-cliente-endereco div select{
+  .dados-cliente-endereco div select {
     max-width: 100px;
   }
 
-  .dados-cliente-input textarea{
+  .dados-cliente-input textarea {
     max-width: 500px;
     width: 100%;
   }
 
-  .buscar-produto-input{
+  .buscar-produto-input {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .buscar-produto-input span{
+  .buscar-produto-input span {
     width: 100%;
   }
 
-  .lista-produto{
+  .lista-produto {
     display: flex;
     flex-direction: column;
   }
 
-  .header-tabela{
+  .header-tabela {
     display: none;
   }
 
-  .corpo-tabela{
+  .corpo-tabela {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -293,45 +294,45 @@
     padding: 15px 5px;
   }
 
-  .corpo-tabela td{
+  .corpo-tabela td {
     font-size: 16px;
   }
 
-  .corpo-tabela td input{
+  .corpo-tabela td input {
     height: 40px;
     text-align: center;
   }
 
-  .corpo-tabela textarea{
+  .corpo-tabela textarea {
     width: 100%;
   }
 
-  .valor-total-input{
+  .valor-total-input {
     display: flex;
     flex-direction: column;
     gap: 15px;
     padding: 5px;
   }
 
-  .valor-total-input div{
+  .valor-total-input div {
     display: flex;
     flex-direction: column;
     gap: 5px;
   }
 
-  .valor-total-input input{
+  .valor-total-input input {
     margin: 0;
     max-width: 120px;
   }
 
-  .pdf-btn{
+  .pdf-btn {
     width: 200px;
     font-size: 16px;
   }
 }
 
-@media(max-width: 425px){
-  .orcamento-container{
+@media (max-width: 425px) {
+  .orcamento-container {
     padding-top: 80px;
   }
 }
