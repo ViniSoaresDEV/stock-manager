@@ -171,8 +171,8 @@ function Budget() {
       return;
     }
 
-    if (prazoPagamento === '') {
-      alert('Por favor, preencha o prazo de entrega.');
+    if (!vendedor || vendedor === '' || vendedor === '0') {
+      alert('Por favor, selecione o vendedor!');
       return;
     }
 
@@ -180,13 +180,14 @@ function Budget() {
       alert('Por favor, selecione a forma de pagamento!');
       return;
     }
-    if (!vendedor || vendedor === '' || vendedor === '0') {
-      alert('Por favor, selecione o vendedor!');
+
+    if (prazoPagamento === '') {
+      alert('Por favor, preencha o prazo de entrega.');
       return;
     }
 
-    if (termoBuscado === '') {
-      alert('Por favor, adicione um item na lista.');
+    if (itensOrcamento.length <= 0) {
+      alert('Selecione pelo menos um item para o orçamento.');
       return;
     }
 
