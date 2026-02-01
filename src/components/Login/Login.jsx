@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { supabase } from '../../supabaseClient';
 import './Login.css';
 import { FiEye } from 'react-icons/fi';
 import { FiEyeOff } from 'react-icons/fi';
@@ -14,21 +15,30 @@ function Login({ onLogin, adm }) {
       return;
     }
 
-    const resposta = await fetch(
-      'https://696fc18ba06046ce6187c5cc.mockapi.io/users',
-    );
-    const dados = await resposta.json();
+    try {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('user', usuario.toLocaleLowerCase())
+        .eq('password', senha)
+        .single();
 
-    const usuarioEncontrado = dados.find((user) => {
-      return user.user === usuario.toLowerCase() && user.password === senha;
-    });
+      if (error) {
+        if (error.code === 'PGRST116') {
+          alert('Usuário ou senha incorretos.');
+          return;
+        }
 
-    if (usuarioEncontrado) {
-      adm(usuario.toLocaleLowerCase());
-      onLogin();
-    } else {
-      alert('Usuário ou senha incorretos.');
-      console.log(dados.user);
+        throw error;
+      }
+
+      if (data) {
+        adm(data.user);
+        onLogin();
+      }
+    } catch (erro) {
+      console.log('Erro no login: ', erro.message);
+      alert('Erro de conexão ou sistema.');
     }
   }
 
@@ -43,6 +53,7 @@ function Login({ onLogin, adm }) {
               type="text"
               className="login-input"
               onChange={(e) => setUsuario(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && validaLogin()}
             />
           </div>
           <div className="login-input-box">
@@ -51,6 +62,7 @@ function Login({ onLogin, adm }) {
               type="password"
               className="login-input"
               onChange={(e) => setSenha(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && validaLogin()}
             />
           </div>
           <button className="login-btn" onClick={validaLogin}>

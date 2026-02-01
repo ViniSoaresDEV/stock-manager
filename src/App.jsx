@@ -5,6 +5,8 @@ import ModalEditar from './components/ModalEditar/ModalEditar';
 import SideMenu from './components/Side Menu/SideMenu';
 import Login from './components/Login/Login';
 import Budget from './components/Budget/Buget';
+import { supabase } from './supabaseClient';
+import { IoMdReturnRight } from 'react-icons/io';
 
 function App() {
   // -------------------------------------------------
@@ -41,16 +43,22 @@ function App() {
 
   // Estado de Produtos
   const [produtos, setProdutos] = useState([]);
-  const API_URL = 'https://696fc18ba06046ce6187c5cc.mockapi.io/produtos';
 
   async function buscarProduto() {
     try {
-      const resposta = await fetch(API_URL);
-      const dados = await resposta.json();
+      const { data, error } = await supabase
+        .from('produtos')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        console.log('Erro ao buscar:', error.message);
+        return;
+      }
 
       // Pequena proteção extra para evitar erros se a API falhar
-      if (Array.isArray(dados)) {
-        setProdutos(dados);
+      if (data) {
+        setProdutos(data);
       }
     } catch (erro) {
       console.error('Erro ao buscar produtos.', erro);
@@ -110,23 +118,21 @@ function App() {
     };
 
     try {
-      const resposta = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(novoItem),
-      });
+      const { data, error } = await supabase
+        .from('produtos')
+        .insert([novoItem])
+        .select();
 
-      const itemCriado = await resposta.json();
+      if (error) throw error;
 
-      setProdutos([...produtos, itemCriado]);
+      setProdutos([data[0], ...produtos]);
 
       // Limpa os inputs
       setNomeProduto('');
       setQuantidade('');
       setPrecoProduto('');
     } catch (erro) {
-      alert('Erro ao adicionar produto.');
-      console.error(erro);
+      console.log('Erro ao inserir: ', erro.message);
     }
   }
 
@@ -134,15 +140,17 @@ function App() {
     if (!confirm('Tem certeza que deseja remover?')) return;
 
     try {
-      await fetch(`${API_URL}/${idProduto}`, {
-        method: 'DELETE',
-      });
+      const { error } = await supabase
+        .from('produtos')
+        .delete()
+        .eq('id', idProduto);
+
+      if (error) throw error;
 
       const novaLista = produtos.filter((item) => item.id !== idProduto);
       setProdutos(novaLista);
     } catch (erro) {
-      alert('Erro ao remover produto.');
-      console.error(erro);
+      console.log('Erro ao remover produto:', erro);
     }
   }
 
@@ -161,11 +169,12 @@ function App() {
     };
 
     try {
-      await fetch(`${API_URL}/${editId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemEditado),
-      });
+      const { error } = await supabase
+        .from('produtos')
+        .update(itemEditado)
+        .eq('id', editId);
+
+      if (error) throw error;
 
       const novaLista = produtos.map((produto) => {
         if (produto.id === editId) {

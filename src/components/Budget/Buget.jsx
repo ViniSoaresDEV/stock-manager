@@ -1,5 +1,5 @@
 import './Budget.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { FaRegTrashAlt, FaTrashAlt } from 'react-icons/fa';
 import logo from '../../assets/img/bellano-logo.png';
 
@@ -30,6 +30,12 @@ function Budget() {
     cep: '',
     uf: '',
   });
+
+  const nomeRef = useRef(null);
+  const documentoRef = useRef(null);
+  const telefoneRef = useRef(null);
+  const enderecoRef = useRef(null);
+  const cepRef = useRef(null);
 
   const valorTotal = Array.isArray(itensOrcamento)
     ? itensOrcamento.reduce((acc, item) => {
@@ -136,8 +142,40 @@ function Budget() {
     setItemOrcamento(itensOrcamento.filter((item) => item.id !== id));
   }
 
-  function gerarPDF() {
+  function validaCampos() {
     // --- 1. VALIDAÇÕES (Segurança antes de começar) ---
+
+    if (cliente.nome === '') {
+      alert('Por favor, preencha o nome do cliente.');
+      nomeRef.current.focus();
+      return;
+    }
+    if (cliente.telefone === '') {
+      alert('Por favor, preencha o telefone do cliente.');
+      telefoneRef.current.focus();
+      return;
+    }
+    if (cliente.endereco === '') {
+      alert('Por favor, preencha o endereço do cliente.');
+      enderecoRef.current.focus();
+      return;
+    }
+    if (cliente.cep === '') {
+      alert('Por favor, preencha o CEP do cliente.');
+      cepRef.current.focus();
+      return;
+    }
+    if (cliente.documento === '') {
+      alert('Por favor, preencha o CPF / CNPJ do cliente.');
+      documentoRef.current.focus();
+      return;
+    }
+
+    if (prazoPagamento === '') {
+      alert('Por favor, preencha o prazo de entrega.');
+      return;
+    }
+
     if (!formaPagamento || formaPagamento === '') {
       alert('Por favor, selecione a forma de pagamento!');
       return;
@@ -147,6 +185,15 @@ function Budget() {
       return;
     }
 
+    if (termoBuscado === '') {
+      alert('Por favor, adicione um item na lista.');
+      return;
+    }
+
+    gerarPDF();
+  }
+
+  function gerarPDF() {
     // --- 2. CONFIGURAÇÕES INICIAIS ---
     const doc = new jsPDF();
 
@@ -476,6 +523,7 @@ function Budget() {
                 <div className="dados-cliente-input">
                   <span>Nome Completo: </span>{' '}
                   <input
+                    ref={nomeRef}
                     type="text"
                     onChange={nomeCliente}
                     value={cliente.nome}
@@ -485,6 +533,7 @@ function Budget() {
                 <div className="dados-cliente-input">
                   <span>CPF / CNPJ: </span>{' '}
                   <input
+                    ref={documentoRef}
                     type="number"
                     onChange={documentoCliente}
                     value={cliente.documento}
@@ -502,6 +551,7 @@ function Budget() {
                 <div className="dados-cliente-input">
                   <span>Telefone: </span>{' '}
                   <input
+                    ref={telefoneRef}
                     type="tel"
                     onChange={telefoneCliente}
                     value={cliente.telefone}
@@ -512,6 +562,7 @@ function Budget() {
                   <div>
                     <span>Endereço: </span>{' '}
                     <input
+                      ref={enderecoRef}
                       type="text"
                       onChange={enderecoCliente}
                       value={cliente.endereco}
@@ -529,6 +580,7 @@ function Budget() {
                   <div>
                     <span>CEP: </span>
                     <input
+                      ref={cepRef}
                       type="text"
                       onChange={clienteCEP}
                       value={cliente.cep}
@@ -595,11 +647,11 @@ function Budget() {
                   ></textarea>
                 </div>
                 <div className="dados-cliente-input">
-                  <span>Prazo de entrega (dias corridos):</span>
+                  <span>Prazo de entrega:</span>
                   <input
                     type="number"
                     onChange={(e) => setPrazoPagamento(e.target.value)}
-                  ></input>
+                  />
                 </div>
               </div>
             </div>
@@ -611,6 +663,7 @@ function Budget() {
                   placeholder="Digite o nome do produto..."
                   onChange={(e) => setTermoBuscado(e.target.value)}
                   value={termoBuscado}
+                  onKeyDown={(e) => e.key === 'Enter' && buscarEAdicionar()}
                 />
                 <button onClick={buscarEAdicionar}>Adicionar</button>
               </div>
@@ -743,7 +796,7 @@ function Budget() {
                 </div>
               </div>
             </div>
-            <button className="pdf-btn" onClick={gerarPDF}>
+            <button className="pdf-btn" onClick={validaCampos}>
               Gerar PDF
             </button>
           </div>
