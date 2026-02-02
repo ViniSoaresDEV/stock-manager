@@ -47,7 +47,7 @@ function App() {
   async function buscarProduto() {
     try {
       const { data, error } = await supabase
-        .from('produtos')
+        .from('estoque')
         .select('*')
         .order('id', { ascending: false });
 
