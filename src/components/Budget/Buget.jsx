@@ -1,14 +1,13 @@
 import './Budget.css';
 import { useState, useRef } from 'react';
 import { FaRegTrashAlt, FaTrashAlt } from 'react-icons/fa';
+import { supabase } from '../../supabaseClient';
 import logo from '../../assets/img/bellano-logo.png';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 function Budget() {
-  const API_URL = 'https://696fc18ba06046ce6187c5cc.mockapi.io/itens';
-
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
 
   const [termoBuscado, setTermoBuscado] = useState('');
@@ -95,19 +94,25 @@ function Budget() {
   async function buscarEAdicionar() {
     if (!termoBuscado) return alert('Por favor, digite o nome do produto.');
 
-    const resposta = await fetch(API_URL);
-    const data = await resposta.json();
+    try {
+      const { data, error } = await supabase
+        .from('catalogo')
+        .select('*')
+        .ilike('nome', `%${termoBuscado}%`)
+        .limit(1);
 
-    const termoEncontrado = data.find((produto) =>
-      produto.nome
-        .toLocaleLowerCase()
-        .includes(termoBuscado.toLocaleLowerCase()),
-    );
+      if (error) {
+        throw error;
+      }
 
-    if (termoEncontrado) {
-      adicionarAoOrcamento(termoEncontrado);
-    } else {
-      alert('Item não encontrado!');
+      if (data && data.length > 0) {
+        adicionarAoOrcamento(data[0]);
+      } else {
+        alert('Item não encontrado no catálogo de produtos!');
+      }
+    } catch (erro) {
+      console.error('Erro ao buscar: ', erro.message);
+      alert('Erro de conexão ao buscar o produto.');
     }
   }
 
@@ -284,7 +289,7 @@ function Budget() {
     };
 
     // Linha 1: Nome e IE (deixei IE em branco pois não tem no form)
-    drawField('Cliente:', cliente.nome, marginX, currentY, 120);
+    drawField('Cliente:', cliente.nome.toUpperCase(), marginX, currentY, 120);
     drawField('IE:', '', marginX + 120, currentY, 60);
     currentY += 6;
 
@@ -294,17 +299,23 @@ function Budget() {
     currentY += 6;
 
     // Linha 3: Endereço e CEP
-    drawField('Endereço:', cliente.endereco, marginX, currentY, 120);
+    drawField(
+      'Endereço:',
+      cliente.endereco.toUpperCase(),
+      marginX,
+      currentY,
+      120,
+    );
     drawField('CEP:', cliente.cep, marginX + 120, currentY, 60);
     currentY += 6;
 
     // Linha 4: Bairro e Telefone
-    drawField('Bairro:', cliente.bairro, marginX, currentY, 120);
+    drawField('Bairro:', cliente.bairro.toUpperCase(), marginX, currentY, 120);
     drawField('TEL:', cliente.telefone, marginX + 120, currentY, 60);
     currentY += 6;
 
     // Linha 5: Email
-    drawField('Email:', cliente.email, marginX, currentY, 180);
+    drawField('Email:', cliente.email.toUpperCase(), marginX, currentY, 180);
     currentY += 10; // Espaço antes da tabela
 
     // ===================================================
