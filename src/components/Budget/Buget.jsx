@@ -98,7 +98,7 @@ function Budget() {
       const { data, error } = await supabase
         .from('catalogo')
         .select('*')
-        .or(`nome.ilike.%${termoBuscado}%,codigo.ilike.%${termoBuscado}%`) // busca na coluna nome ou na coluna codigo
+        .or(`nome.ilike.%${termoBuscado}%,codigo.ilike.%${termoBuscado}%`) // busca na coluna nome ou na coluna codigo e retorna apenas o valor encontrado
         .limit(1);
 
       if (error) {
@@ -106,7 +106,7 @@ function Budget() {
       }
 
       if (data && data.length > 0) {
-        adicionarAoOrcamento(data[0]);
+        adicionarAoOrcamento(data[0]); // retorna todo o objeto dentro do array no index 0 (que é o valor encontrado na busca)
       } else {
         alert('Item não encontrado no catálogo de produtos!');
       }
