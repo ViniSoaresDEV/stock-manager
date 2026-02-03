@@ -98,7 +98,7 @@ function Budget() {
       const { data, error } = await supabase
         .from('catalogo')
         .select('*')
-        .ilike('nome', `%${termoBuscado}%`)
+        .or(`nome.ilike.%${termoBuscado}%,codigo.ilike.%${termoBuscado}%`) // busca na coluna nome ou na coluna codigo
         .limit(1);
 
       if (error) {
