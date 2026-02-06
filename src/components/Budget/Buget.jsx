@@ -3,9 +3,9 @@ import { useState, useRef } from 'react';
 import { FaRegTrashAlt, FaTrashAlt } from 'react-icons/fa';
 import { supabase } from '../../supabaseClient';
 import logo from '../../assets/img/bellano-logo.png';
-
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import SearchBudget from '../SearchBudget/SearchBudget';
 
 function Budget() {
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
@@ -29,6 +29,60 @@ function Budget() {
     cep: '',
     uf: '',
   });
+
+  const salvarOrcamento = async () => {
+    try {
+      const { data: clienteSalvo, error: erroCliente } = await supabase // pega os dados da tabela e salva como clienteSalvo
+        .from('clientes')
+        .upsert(
+          // upSert serve para atualizar os dados, exceto o documento que não pode ser alterado
+          {
+            documento: cliente.documento,
+            nome: cliente.nome,
+            telefone: cliente.telefone,
+            email: cliente.email,
+            endereco: {
+              rua: cliente.endereco,
+              bairro: cliente.bairro,
+              cep: cliente.cep,
+              uf: cliente.uf,
+            },
+          },
+          { onConflict: 'documento' },
+        )
+        .select() // seleciona e guarda o dado buscado para a variável criada clienteSalvo
+        .single(); // retorna apenas um dado
+
+      if (erroCliente) throw erroCliente;
+
+      const { data: orcamentoSalvo, error: erroOrcamento } = await supabase // pega os dados e salva como orcamentoSalvo
+        .from('orcamentos')
+        .insert({
+          // insere os dados abaixo na tabela orçamentos
+          cliente_id: clienteSalvo.id,
+          data: new Date().toLocaleDateString('pt-BR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }),
+          vendedor: vendedor,
+          itens: itensOrcamento,
+          subtotal: valorTotal,
+          desconto: calculoDesconto,
+          frete: frete,
+          valor_total: valorTotalFinal,
+          status: 'pendente',
+        })
+        .select() // seleciona o dado e guarda na variável orcamentoSalvo
+        .single();
+
+      if (erroOrcamento) throw erroOrcamento;
+
+      alert(`Orçamento n° ${orcamentoSalvo.id} salvo com sucesso.`);
+    } catch (error) {
+      console.error('Erro na operação: ', error.message);
+    }
+  };
 
   const nomeRef = useRef(null);
   const documentoRef = useRef(null);
@@ -197,6 +251,7 @@ function Budget() {
     }
 
     gerarPDF();
+    salvarOrcamento();
   }
 
   function gerarPDF() {
@@ -815,7 +870,11 @@ function Budget() {
         </>
       )}
 
-      {gerarOrcamentoBtn === 'buscar-orcamento' && <></>}
+      {gerarOrcamentoBtn === 'buscar-orcamento' && (
+        <>
+          <SearchBudget />
+        </>
+      )}
     </div>
   );
 }
