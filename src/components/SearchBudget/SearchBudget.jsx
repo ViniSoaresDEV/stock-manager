@@ -10,40 +10,71 @@ function SearchBudget() {
   const [dadosBuscados, setDadosBuscados] = useState([]);
 
   const buscaOrcamento = async () => {
-    const { data, error } = await supabase
-      .from('orcamentos')
-      .select('*, clientes(nome)')
-      .eq('id', idDigitado)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('orcamentos')
+        .select('*, clientes(nome)')
+        .eq('id', idDigitado)
+        .single();
 
-    if (error) throw error;
+      if (!data) {
+        alert('Orçamento não encontrado!');
+        return;
+      }
+      if (error) throw error;
 
-    console.log(data);
-    setDadosBuscados([data]);
+      console.log(data);
+      setDadosBuscados([data]);
+    } catch (error) {
+      console.error('Erro ao buscar: ', error.message);
+      alert('Erro ao buscar orçamento');
+    }
   };
 
   const finalizaPedido = async (id) => {
-    const { data: dadosTabela, error } = await supabase
-      .from('orcamentos')
-      .select('*')
-      .eq('id', id)
-      .single();
-    console.log(dadosTabela);
+    try {
+      const { error } = await supabase
+        .from('orcamentos')
+        .update({ status: 'Finalizado' })
+        .eq('id', id);
 
-    if (error) throw error;
+      if (error) throw error;
 
-    const { data: statusFinalizado, error: erroFinalizar } = await supabase
-      .from('orcamentos')
-      .upsert({
-        ...dadosTabela,
-        status: 'Finalizado',
-      })
-      .select()
-      .single();
+      setDadosBuscados(
+        (
+          novaLista, // apenas a seta pois fica explícito para o react que tudo depois da seta é um return;
+        ) =>
+          novaLista.map((item) => {
+            if (item.id === id) {
+              return { ...item, status: 'Finalizado' };
+            }
 
-    if (erroFinalizar) throw erroFinalizar;
+            return item;
+          }),
+      );
 
-    console.log(statusFinalizado);
+      alert('Pedido finalizado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao finalizar: ', error.message);
+      alert('Erro ao atualizar o status.');
+    }
+  };
+
+  const excluirOrcamento = async (id) => {
+    try {
+      if (!confirm(`Deseja excluir o orçamento n° ${id}?`)) {
+        return;
+      }
+      const { error } = await supabase.from('orcamentos').delete().eq('id', id);
+
+      if (error) throw error;
+      setDadosBuscados([]);
+
+      alert('Orçamento excluído com sucesso!');
+    } catch (error) {
+      console.error('Erro ao deletar: ', error.message);
+      alert('Erro ao excluir orçamento.');
+    }
   };
 
   return (
@@ -93,7 +124,7 @@ function SearchBudget() {
                 <button>
                   <FaEdit /> Editar
                 </button>
-                <button>
+                <button onClick={() => excluirOrcamento(dados.id)}>
                   <FaTrash />
                   Excluir
                 </button>
