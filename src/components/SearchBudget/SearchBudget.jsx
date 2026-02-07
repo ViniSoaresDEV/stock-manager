@@ -63,7 +63,7 @@ function SearchBudget() {
             <li key={dados.id}>
               <div>
                 <span>Data:</span>
-                <span>{dados.data}</span>
+                <span>{new Date(dados.data).toLocaleDateString('pt-BR')}</span>
               </div>
               <div>
                 <span>Nome:</span>
