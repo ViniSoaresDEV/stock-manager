@@ -17,7 +17,7 @@ function Budget() {
   const [vendedor, setVendedor] = useState('');
   const [formaPagamento, setFormaPagamento] = useState('');
   const [condicaoPagamento, setCondicaoPagamento] = useState('');
-  const [prazoPagamento, setPrazoPagamento] = useState('');
+  const [prazoEntrega, setprazoEntrega] = useState('');
 
   const [cliente, setCliente] = useState({
     nome: '',
@@ -240,7 +240,7 @@ function Budget() {
       return;
     }
 
-    if (prazoPagamento === '') {
+    if (prazoEntrega === '') {
       alert('Por favor, preencha o prazo de entrega.');
       return;
     }
@@ -513,7 +513,7 @@ function Budget() {
     doc.setTextColor(150, 50, 50); // Cor de alerta
     doc.setFont('helvetica', 'italic');
     // Se tiver observação no item, mostra aqui, ou uma obs geral
-    doc.text(`${prazoPagamento} dias corridos.`, marginX, footerY + 34);
+    doc.text(`${prazoEntrega} dias corridos.`, marginX, footerY + 34);
 
     // Observações
     doc.setFillColor(...colorPurple);
@@ -567,6 +567,25 @@ function Budget() {
     // Salvar
     const nomeArquivo = `orcamento_${cliente.nome.replace(/ /g, '_')}_${dataAtual.getDate()}-${dataAtual.getMonth() + 1}.pdf`;
     doc.save(nomeArquivo);
+
+    setCliente({
+      nome: '',
+      documento: '',
+      email: '',
+      telefone: '',
+      endereco: '',
+      bairro: '',
+      cep: '',
+      uf: '',
+    });
+
+    setVendedor('');
+    setFormaPagamento('');
+    setCondicaoPagamento('');
+    setprazoEntrega('');
+    setDesconto('');
+    setFrete('');
+    setItemOrcamento([]);
   }
 
   return (
@@ -689,7 +708,10 @@ function Budget() {
                 </div>
                 <div className="dados-cliente-input">
                   <span>Vendedor: </span>{' '}
-                  <select onChange={(e) => setVendedor(e.target.value)}>
+                  <select
+                    value={vendedor}
+                    onChange={(e) => setVendedor(e.target.value)}
+                  >
                     <option value="">Selecionar vendedor</option>
                     <option value="Raquel Passos">Raquel Passos</option>
                     <option value="Thays Rianelli">Thays Rianelli</option>
@@ -699,7 +721,10 @@ function Budget() {
                 </div>
                 <div className="dados-cliente-input">
                   <span>Forma de Pagamento: </span>{' '}
-                  <select onChange={(e) => setFormaPagamento(e.target.value)}>
+                  <select
+                    value={formaPagamento}
+                    onChange={(e) => setFormaPagamento(e.target.value)}
+                  >
                     <option value="">Selecionar</option>
                     <option value="Cartão de Crédito">Cartão de Crédito</option>
                     <option value="Cartão de Débito">Cartão de Débito</option>
@@ -710,6 +735,7 @@ function Budget() {
                 <div className="dados-cliente-input">
                   <span>Observação de pagamento:</span>
                   <textarea
+                    value={condicaoPagamento}
                     onChange={(e) => setCondicaoPagamento(e.target.value)}
                   ></textarea>
                 </div>
@@ -717,7 +743,8 @@ function Budget() {
                   <span>Prazo de entrega:</span>
                   <input
                     type="number"
-                    onChange={(e) => setPrazoPagamento(e.target.value)}
+                    value={prazoEntrega}
+                    onChange={(e) => setprazoEntrega(e.target.value)}
                   />
                 </div>
               </div>
@@ -820,6 +847,7 @@ function Budget() {
                     <span>Desconto (%): </span>
                     <input
                       type="number"
+                      value={desconto}
                       onChange={(e) => setDesconto(e.target.value)}
                     />
                   </div>
@@ -827,6 +855,7 @@ function Budget() {
                     <span>Valor do Frete: </span>
                     <input
                       type="number"
+                      value={frete}
                       onChange={(e) => setFrete(e.target.value)}
                     />
                   </div>
