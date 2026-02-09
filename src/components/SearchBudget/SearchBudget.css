@@ -42,7 +42,7 @@
 .budget-list {
   width: 100%;
   background-color: white;
-  padding: 20px 0;
+  padding: 20px 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   box-shadow: 3px 6px 6px rgba(0, 0, 0, 0.2);
@@ -84,4 +84,22 @@
 
 .del-btn {
   color: red;
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+  .budget-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 768px) {
+  .orcamento-container h1 {
+    font-size: 24px;
+  }
+
+  .budget-list li {
+    display: flex;
+    flex-direction: column;
+  }
 }
