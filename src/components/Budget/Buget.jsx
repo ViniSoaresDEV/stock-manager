@@ -3,9 +3,9 @@ import { useState, useRef } from 'react';
 import { FaRegTrashAlt, FaTrashAlt } from 'react-icons/fa';
 import { supabase } from '../../supabaseClient';
 import logo from '../../assets/img/bellano-logo.png';
-
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import SearchBudget from '../SearchBudget/SearchBudget';
 
 function Budget() {
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
@@ -17,7 +17,7 @@ function Budget() {
   const [vendedor, setVendedor] = useState('');
   const [formaPagamento, setFormaPagamento] = useState('');
   const [condicaoPagamento, setCondicaoPagamento] = useState('');
-  const [prazoPagamento, setPrazoPagamento] = useState('');
+  const [prazoEntrega, setprazoEntrega] = useState('');
 
   const [cliente, setCliente] = useState({
     nome: '',
@@ -29,6 +29,60 @@ function Budget() {
     cep: '',
     uf: '',
   });
+
+  const salvarOrcamento = async () => {
+    try {
+      const { data: clienteSalvo, error: erroCliente } = await supabase // pega os dados da tabela e salva como clienteSalvo
+        .from('clientes')
+        .upsert(
+          // upSert serve para atualizar os dados, exceto o documento que não pode ser alterado
+          {
+            documento: cliente.documento,
+            nome: cliente.nome,
+            telefone: cliente.telefone,
+            email: cliente.email,
+            endereco: {
+              rua: cliente.endereco,
+              bairro: cliente.bairro,
+              cep: cliente.cep,
+              uf: cliente.uf,
+            },
+          },
+          { onConflict: 'documento' },
+        )
+        .select() // seleciona e guarda o dado buscado para a variável criada clienteSalvo
+        .single(); // retorna apenas um dado
+
+      if (erroCliente) throw erroCliente;
+
+      const { data: orcamentoSalvo, error: erroOrcamento } = await supabase // pega os dados e salva como orcamentoSalvo
+        .from('orcamentos')
+        .insert({
+          // insere os dados abaixo na tabela orçamentos
+          cliente_id: clienteSalvo.id,
+          data: new Date().toLocaleDateString('pt-BR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }),
+          vendedor: vendedor,
+          itens: itensOrcamento,
+          subtotal: valorTotal,
+          desconto: calculoDesconto,
+          frete: frete,
+          valor_total: valorTotalFinal,
+          status: 'pendente',
+        })
+        .select() // seleciona o dado e guarda na variável orcamentoSalvo
+        .single();
+
+      if (erroOrcamento) throw erroOrcamento;
+
+      alert(`Orçamento n° ${orcamentoSalvo.id} salvo com sucesso.`);
+    } catch (error) {
+      console.error('Erro na operação: ', error.message);
+    }
+  };
 
   const nomeRef = useRef(null);
   const documentoRef = useRef(null);
@@ -186,7 +240,7 @@ function Budget() {
       return;
     }
 
-    if (prazoPagamento === '') {
+    if (prazoEntrega === '') {
       alert('Por favor, preencha o prazo de entrega.');
       return;
     }
@@ -197,6 +251,7 @@ function Budget() {
     }
 
     gerarPDF();
+    salvarOrcamento();
   }
 
   function gerarPDF() {
@@ -458,7 +513,7 @@ function Budget() {
     doc.setTextColor(150, 50, 50); // Cor de alerta
     doc.setFont('helvetica', 'italic');
     // Se tiver observação no item, mostra aqui, ou uma obs geral
-    doc.text(`${prazoPagamento} dias corridos.`, marginX, footerY + 34);
+    doc.text(`${prazoEntrega} dias corridos.`, marginX, footerY + 34);
 
     // Observações
     doc.setFillColor(...colorPurple);
@@ -512,6 +567,25 @@ function Budget() {
     // Salvar
     const nomeArquivo = `orcamento_${cliente.nome.replace(/ /g, '_')}_${dataAtual.getDate()}-${dataAtual.getMonth() + 1}.pdf`;
     doc.save(nomeArquivo);
+
+    setCliente({
+      nome: '',
+      documento: '',
+      email: '',
+      telefone: '',
+      endereco: '',
+      bairro: '',
+      cep: '',
+      uf: '',
+    });
+
+    setVendedor('');
+    setFormaPagamento('');
+    setCondicaoPagamento('');
+    setprazoEntrega('');
+    setDesconto('');
+    setFrete('');
+    setItemOrcamento([]);
   }
 
   return (
@@ -634,7 +708,10 @@ function Budget() {
                 </div>
                 <div className="dados-cliente-input">
                   <span>Vendedor: </span>{' '}
-                  <select onChange={(e) => setVendedor(e.target.value)}>
+                  <select
+                    value={vendedor}
+                    onChange={(e) => setVendedor(e.target.value)}
+                  >
                     <option value="">Selecionar vendedor</option>
                     <option value="Raquel Passos">Raquel Passos</option>
                     <option value="Thays Rianelli">Thays Rianelli</option>
@@ -644,7 +721,10 @@ function Budget() {
                 </div>
                 <div className="dados-cliente-input">
                   <span>Forma de Pagamento: </span>{' '}
-                  <select onChange={(e) => setFormaPagamento(e.target.value)}>
+                  <select
+                    value={formaPagamento}
+                    onChange={(e) => setFormaPagamento(e.target.value)}
+                  >
                     <option value="">Selecionar</option>
                     <option value="Cartão de Crédito">Cartão de Crédito</option>
                     <option value="Cartão de Débito">Cartão de Débito</option>
@@ -655,6 +735,7 @@ function Budget() {
                 <div className="dados-cliente-input">
                   <span>Observação de pagamento:</span>
                   <textarea
+                    value={condicaoPagamento}
                     onChange={(e) => setCondicaoPagamento(e.target.value)}
                   ></textarea>
                 </div>
@@ -662,7 +743,8 @@ function Budget() {
                   <span>Prazo de entrega:</span>
                   <input
                     type="number"
-                    onChange={(e) => setPrazoPagamento(e.target.value)}
+                    value={prazoEntrega}
+                    onChange={(e) => setprazoEntrega(e.target.value)}
                   />
                 </div>
               </div>
@@ -765,6 +847,7 @@ function Budget() {
                     <span>Desconto (%): </span>
                     <input
                       type="number"
+                      value={desconto}
                       onChange={(e) => setDesconto(e.target.value)}
                     />
                   </div>
@@ -772,6 +855,7 @@ function Budget() {
                     <span>Valor do Frete: </span>
                     <input
                       type="number"
+                      value={frete}
                       onChange={(e) => setFrete(e.target.value)}
                     />
                   </div>
@@ -815,7 +899,11 @@ function Budget() {
         </>
       )}
 
-      {gerarOrcamentoBtn === 'buscar-orcamento' && <></>}
+      {gerarOrcamentoBtn === 'buscar-orcamento' && (
+        <>
+          <SearchBudget />
+        </>
+      )}
     </div>
   );
 }
