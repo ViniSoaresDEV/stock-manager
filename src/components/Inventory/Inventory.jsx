@@ -1,4 +1,5 @@
 import { FaRegTrashAlt, FaRegEdit } from 'react-icons/fa';
+import './Inventory.css';
 
 function Inventary({
   produtos,
