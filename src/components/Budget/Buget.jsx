@@ -18,6 +18,7 @@ function Budget() {
   const [formaPagamento, setFormaPagamento] = useState('');
   const [condicaoPagamento, setCondicaoPagamento] = useState('');
   const [prazoEntrega, setprazoEntrega] = useState('');
+  const [idEdicao, setIdEdicao] = useState(null);
 
   const [cliente, setCliente] = useState({
     nome: '',
@@ -29,6 +30,34 @@ function Budget() {
     cep: '',
     uf: '',
   });
+
+  const preencherFormularioEdicao = (dadosDoBanco) => {
+    const enderecoCliente = dadosDoBanco.clientes?.endereco;
+
+    setVendedor(dadosDoBanco.vendedor);
+    setItemOrcamento(dadosDoBanco.itens);
+    setFormaPagamento(dadosDoBanco.forma_pagamento);
+    setprazoEntrega(dadosDoBanco.prazo_entrega);
+    setCondicaoPagamento(dadosDoBanco.obs_pagamento);
+    setFrete(dadosDoBanco.frete);
+    setDesconto(dadosDoBanco.porcentagem_desconto);
+    console.log(dadosDoBanco);
+
+    setCliente({
+      nome: dadosDoBanco.clientes?.nome || '',
+      documento: dadosDoBanco.clientes?.documento || '',
+      email: dadosDoBanco.clientes?.email || '',
+      telefone: dadosDoBanco.clientes?.telefone || '',
+      endereco: enderecoCliente.rua || '',
+      bairro: enderecoCliente.bairro || '',
+      cep: enderecoCliente.cep || '',
+      uf: enderecoCliente.uf || '',
+    });
+
+    setIdEdicao(dadosDoBanco.id);
+
+    setGerarOrcamentoBtn('gerar-orcamento');
+  };
 
   const salvarOrcamento = async () => {
     try {
@@ -55,30 +84,66 @@ function Budget() {
 
       if (erroCliente) throw erroCliente;
 
-      const { data: orcamentoSalvo, error: erroOrcamento } = await supabase // pega os dados e salva como orcamentoSalvo
-        .from('orcamentos')
-        .insert({
-          // insere os dados abaixo na tabela orçamentos
-          cliente_id: clienteSalvo.id,
-          data: new Date().toLocaleDateString('pt-BR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }),
-          vendedor: vendedor,
-          itens: itensOrcamento,
-          subtotal: valorTotal,
-          desconto: calculoDesconto,
-          frete: frete,
-          valor_total: valorTotalFinal,
-          status: 'pendente',
-        })
-        .select() // seleciona o dado e guarda na variável orcamentoSalvo
-        .single();
+      if (idEdicao) {
+        const { data: orcamentoSalvo, error: erroOrcamento } = await supabase // pega os dados e salva como orcamentoSalvo
+          .from('orcamentos')
+          .update({
+            // insere os dados abaixo na tabela orçamentos
+            cliente_id: clienteSalvo.id,
+            data: new Date().toLocaleDateString('pt-BR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }),
+            vendedor: vendedor,
+            forma_pagamento: formaPagamento,
+            obs_pagamento: condicaoPagamento,
+            prazo_entrega: prazoEntrega,
+            itens: itensOrcamento,
+            subtotal: valorTotal,
+            desconto: calculoDesconto,
+            frete: frete,
+            valor_total: valorTotalFinal,
+            porcentagem_desconto: desconto,
+            status: 'pendente',
+          })
+          .select()
+          .eq('id', idEdicao) // seleciona o dado e guarda na variável orcamentoSalvo
+          .single();
 
-      if (erroOrcamento) throw erroOrcamento;
+        if (erroOrcamento) throw erroOrcamento;
 
-      alert(`Orçamento n° ${orcamentoSalvo.id} salvo com sucesso.`);
+        alert(`Orçamento n° ${orcamentoSalvo.id} atualizado com sucesso.`);
+      } else {
+        const { data: orcamentoSalvo, error: erroOrcamento } = await supabase // pega os dados e salva como orcamentoSalvo
+          .from('orcamentos')
+          .insert({
+            // insere os dados abaixo na tabela orçamentos
+            cliente_id: clienteSalvo.id,
+            data: new Date().toLocaleDateString('pt-BR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }),
+            vendedor: vendedor,
+            forma_pagamento: formaPagamento,
+            obs_pagamento: condicaoPagamento,
+            prazo_entrega: prazoEntrega,
+            itens: itensOrcamento,
+            subtotal: valorTotal,
+            desconto: calculoDesconto,
+            frete: frete,
+            valor_total: valorTotalFinal,
+            porcentagem_desconto: desconto,
+            status: 'pendente',
+          })
+          .select() // seleciona o dado e guarda na variável orcamentoSalvo
+          .single();
+
+        if (erroOrcamento) throw erroOrcamento;
+
+        alert(`Orçamento n° ${orcamentoSalvo.id} salvo com sucesso.`);
+      }
     } catch (error) {
       console.error('Erro na operação: ', error.message);
     }
@@ -901,7 +966,7 @@ function Budget() {
 
       {gerarOrcamentoBtn === 'buscar-orcamento' && (
         <>
-          <SearchBudget />
+          <SearchBudget aoClicarEmEditar={preencherFormularioEdicao} />
         </>
       )}
     </div>

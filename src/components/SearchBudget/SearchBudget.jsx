@@ -5,7 +5,7 @@ import { FaCheck } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa';
 
-function SearchBudget() {
+function SearchBudget({ aoClicarEmEditar }) {
   const [idDigitado, setIdDigitado] = useState('');
   const [dadosBuscados, setDadosBuscados] = useState([]);
 
@@ -13,17 +13,17 @@ function SearchBudget() {
     try {
       const { data, error } = await supabase
         .from('orcamentos')
-        .select('*, clientes(nome)')
+        .select('*, clientes(*)')
         .eq('id', idDigitado)
         .single();
 
       if (!data) {
         alert('Orçamento não encontrado!');
+        setDadosBuscados([]);
         return;
       }
       if (error) throw error;
 
-      console.log(data);
       setDadosBuscados([data]);
     } catch (error) {
       console.error('Erro ao buscar: ', error.message);
@@ -33,6 +33,8 @@ function SearchBudget() {
 
   const finalizaPedido = async (id) => {
     try {
+      if (!confirm(`Deseja realmente finalizar o orçamento n°${id}?`)) return;
+
       const { error } = await supabase
         .from('orcamentos')
         .update({ status: 'Finalizado' })
@@ -80,58 +82,83 @@ function SearchBudget() {
   return (
     <div className="orcamento-container">
       <h1>Buscar Orçamento</h1>
-      <div>
+      <div className="search-input">
         <input
           type="text"
+          onKeyDown={(e) => e.key === 'Enter' && buscaOrcamento()}
           onChange={(e) => setIdDigitado(e.target.value)}
           placeholder="digite o n° do pedido"
         />{' '}
         <button onClick={buscaOrcamento}>Buscar</button>
       </div>
-      <div>
-        <ul>
-          {dadosBuscados.map((dados) => (
-            <li key={dados.id}>
-              <div>
-                <span>Data:</span>
-                <span>{new Date(dados.data).toLocaleDateString('pt-BR')}</span>
-              </div>
-              <div>
-                <span>Nome:</span>
-                <span>{dados.clientes.nome}</span>
-              </div>
-              <div>
-                <span>Total itens:</span>
-                <span>{dados.itens.length}</span>
-              </div>
-              <div>
-                <span>Valor total:</span>
-                <span>
-                  {dados.valor_total.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </span>
-              </div>
-              <div>
-                <span>Status:</span>
-                <span>{dados.status}</span>
-              </div>
-              <div>
-                <button onClick={() => finalizaPedido(dados.id)}>
-                  <FaCheck /> Finalizar
-                </button>
-                <button>
-                  <FaEdit /> Editar
-                </button>
-                <button onClick={() => excluirOrcamento(dados.id)}>
-                  <FaTrash />
-                  Excluir
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className="budget-list-box">
+        {dadosBuscados.length > 0 ? (
+          <ul className="budget-list">
+            {dadosBuscados.map((dados) => (
+              <li key={dados.id}>
+                <div className="li-box">
+                  <span>
+                    <strong>Data:</strong>
+                  </span>
+                  <span>
+                    {new Date(dados.data).toLocaleDateString('pt-BR')}
+                  </span>
+                </div>
+                <div className="li-box">
+                  <span>
+                    <strong>Nome:</strong>
+                  </span>
+                  <span>{dados.clientes.nome}</span>
+                </div>
+                <div className="li-box">
+                  <span>
+                    <strong>Total itens:</strong>
+                  </span>
+                  <span>{dados.itens.length}</span>
+                </div>
+                <div className="li-box">
+                  <span>
+                    <strong>Valor total:</strong>
+                  </span>
+                  <span>
+                    {dados.valor_total.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </span>
+                </div>
+                <div className="li-box">
+                  <span>
+                    <strong>Status:</strong>
+                  </span>
+                  <span>{dados.status}</span>
+                </div>
+                <div className="button-box">
+                  <button
+                    className="check-btn"
+                    onClick={() => finalizaPedido(dados.id)}
+                  >
+                    <FaCheck /> Finalizar
+                  </button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => aoClicarEmEditar(dados)}
+                  >
+                    <FaEdit /> Editar
+                  </button>
+                  <button
+                    className="del-btn"
+                    onClick={() => excluirOrcamento(dados.id)}
+                  >
+                    <FaTrash /> Excluir
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          'Aguardando a busca do orçamento...'
+        )}
       </div>
     </div>
   );

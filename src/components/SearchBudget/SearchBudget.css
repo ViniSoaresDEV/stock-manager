@@ -1,0 +1,87 @@
+.orcamento-container {
+  width: 100%;
+}
+
+.budget-list-box {
+  display: flex;
+  width: 100%;
+  max-width: 1024px;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  padding: 20px 0px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-input input {
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.search-input button {
+  width: 80px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: rgb(80, 124, 255);
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+}
+
+.budget-list {
+  width: 100%;
+  background-color: white;
+  padding: 20px 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 3px 6px 6px rgba(0, 0, 0, 0.2);
+}
+
+.budget-list li {
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+  gap: 20px;
+}
+
+.li-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.button-box button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.check-btn {
+  color: rgb(47, 130, 47);
+}
+
+.edit-btn {
+  color: rgb(80, 124, 255);
+}
+
+.del-btn {
+  color: red;
+}
