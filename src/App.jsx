@@ -232,6 +232,7 @@ function App() {
       <SideMenu
         onLogout={handleLogout}
         navegar={setPaginaAtual}
+        usuario={usuarioLogado}
         ativo={menuAberto} // Passa o estado atual do menuAberto
         fechar={() => setMenuAberto(false)} // executa a troca do menuAberto para false
       />

@@ -1,23 +1,28 @@
-import "./SideMenu.css";
-import { MdOutlinePointOfSale } from "react-icons/md";
-import { BsBoxSeam } from "react-icons/bs";
-import { MdLogout } from "react-icons/md";
-import { FaTimes } from "react-icons/fa";
+import './SideMenu.css';
+import { MdOutlinePointOfSale } from 'react-icons/md';
+import { BsBoxSeam } from 'react-icons/bs';
+import { MdLogout } from 'react-icons/md';
+import { FaTimes } from 'react-icons/fa';
 
-function SideMenu({ onLogout, navegar, ativo, fechar }) {
+function SideMenu({ onLogout, navegar, ativo, fechar, usuario }) {
   return (
-    <aside className={`side-menu ${ativo ? "aberto" : ""}`}>
+    <aside className={`side-menu ${ativo ? 'aberto' : ''}`}>
       <button className="close-menu" onClick={fechar}>
         <FaTimes />
       </button>
 
       <nav>
-        <h2 style={{ marginBottom: "30px", color: "white" }}>Bellano Móveis</h2>
+        <span
+          style={{ color: 'white', marginBottom: '20px', display: 'block' }}
+        >
+          Bem-vindo(a), {usuario.charAt(0).toUpperCase() + usuario.slice(1)}!
+        </span>
+        <h2 style={{ marginBottom: '30px', color: 'white' }}>Bellano Móveis</h2>
         <ul className="sidebar-list">
           <li>
             <a
               onClick={() => {
-                (navegar("estoque"), fechar());
+                (navegar('estoque'), fechar());
               }}
             >
               <BsBoxSeam /> Gestor de Estoque
@@ -26,7 +31,7 @@ function SideMenu({ onLogout, navegar, ativo, fechar }) {
           <li>
             <a
               onClick={() => {
-                (navegar("orcamento"), fechar());
+                (navegar('orcamento'), fechar());
               }}
             >
               <MdOutlinePointOfSale /> Orçamentos
