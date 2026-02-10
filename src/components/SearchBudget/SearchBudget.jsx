@@ -1,30 +1,44 @@
 import './SearchBudget.css';
 import { supabase } from '../../supabaseClient';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa';
 
-function SearchBudget({ aoClicarEmEditar }) {
+function SearchBudget({ aoClicarEmEditar, checaUsuario }) {
   const [idDigitado, setIdDigitado] = useState('');
   const [dadosBuscados, setDadosBuscados] = useState([]);
 
   const buscaOrcamento = async () => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('orcamentos')
         .select('*, clientes(*)')
-        .eq('id', idDigitado)
-        .single();
+        .order('data', { ascending: false });
 
-      if (!data) {
-        alert('Orçamento não encontrado!');
+      if (checaUsuario === 'raquel') {
+        query = query.eq('vendedor', 'Raquel Passos');
+      } else if (checaUsuario === 'thays') {
+        query = query.eq('vendedor', 'Thays Rianelli');
+      } else if (checaUsuario === 'aldeir') {
+        query = query.eq('vendedor', 'Aldeir Gonçalves');
+      }
+
+      if (idDigitado) {
+        query = query.eq('id', idDigitado);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        alert('Nenhum orçamento encontrado.');
         setDadosBuscados([]);
         return;
       }
-      if (error) throw error;
 
-      setDadosBuscados([data]);
+      setDadosBuscados(data);
     } catch (error) {
       console.error('Erro ao buscar: ', error.message);
       alert('Erro ao buscar orçamento');

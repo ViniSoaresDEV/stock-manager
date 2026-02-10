@@ -15,6 +15,11 @@ function App() {
 
   // Estado de Login (Com persistência no LocalStorage)
   const [loginAdm, setLoginAdm] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState('');
+
+  const privacyBudget = (user) => {
+    setUsuarioLogado(user);
+  };
 
   // Verificando acesso ADM para liberar edição do conteúdo do estoque
   const isAdm = (user) => {
@@ -205,7 +210,9 @@ function App() {
   // -------------------------------------------------
 
   if (!logado) {
-    return <Login onLogin={handleLogin} adm={isAdm} />;
+    return (
+      <Login onLogin={handleLogin} adm={isAdm} privacidade={privacyBudget} />
+    );
   }
 
   // -------------------------------------------------
@@ -261,7 +268,7 @@ function App() {
           )}
         </>
       )}
-      {paginaAtual === 'orcamento' && <Budget />}
+      {paginaAtual === 'orcamento' && <Budget usuario={usuarioLogado} />}
     </div>
   );
 }

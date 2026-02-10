@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import SearchBudget from '../SearchBudget/SearchBudget';
 
-function Budget() {
+function Budget({ usuario }) {
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
 
   const [termoBuscado, setTermoBuscado] = useState('');
@@ -966,7 +966,10 @@ function Budget() {
 
       {gerarOrcamentoBtn === 'buscar-orcamento' && (
         <>
-          <SearchBudget aoClicarEmEditar={preencherFormularioEdicao} />
+          <SearchBudget
+            aoClicarEmEditar={preencherFormularioEdicao}
+            checaUsuario={usuario}
+          />
         </>
       )}
     </div>

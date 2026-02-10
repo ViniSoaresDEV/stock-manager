@@ -5,7 +5,7 @@ import { FiEye } from 'react-icons/fi';
 import { FiEyeOff } from 'react-icons/fi';
 import { LuAperture } from 'react-icons/lu';
 
-function Login({ onLogin, adm }) {
+function Login({ onLogin, adm, privacidade }) {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
 
@@ -34,6 +34,7 @@ function Login({ onLogin, adm }) {
 
       if (data) {
         adm(data.user);
+        privacidade(data.user);
         onLogin();
       }
     } catch (erro) {
