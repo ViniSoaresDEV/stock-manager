@@ -241,6 +241,10 @@
     align-items: flex-start;
   }
 
+  .gerar-orcamento-container {
+    padding: 0 10px;
+  }
+
   .dados-cliente-input input,
   .dados-cliente-input span {
     width: 100%;
@@ -333,6 +337,7 @@
   .pdf-btn {
     width: 200px;
     font-size: 16px;
+    margin-bottom: 20px;
   }
 }
 
