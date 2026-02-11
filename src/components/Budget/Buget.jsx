@@ -6,6 +6,7 @@ import logo from '../../assets/img/bellano-logo.png';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import SearchBudget from '../SearchBudget/SearchBudget';
+import { PiDotDuotone } from 'react-icons/pi';
 
 function Budget({ usuario }) {
   const [gerarOrcamentoBtn, setGerarOrcamentoBtn] = useState('');
@@ -243,8 +244,16 @@ function Budget({ usuario }) {
       return;
     }
 
+    let precoFinal = produto.preco;
+
+    if (usuario === 'thays') {
+      precoFinal = produto.preco * 1.1;
+      console.log(`Preço ajustado de ${produto.preco} para ${precoFinal}`);
+    }
+
     const novoItemOrcamento = {
       ...produto,
+      preco: precoFinal,
       quantidade: 1,
       observacao: '',
     };
