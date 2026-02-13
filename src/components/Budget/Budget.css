@@ -15,7 +15,8 @@
   justify-content: space-around;
 }
 
-.box-btn-orcamento button {
+.box-btn-orcamento button,
+.autofill-btn {
   padding: 10px;
   border: none;
   border-radius: 8px;
@@ -62,6 +63,17 @@
   border-radius: 5px;
 }
 
+.autofill-box {
+  padding: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+}
+
 .dados-cliente-input {
   padding: 15px;
   width: 100%;
@@ -73,11 +85,16 @@
   font-size: 16px;
 }
 
-.dados-cliente-input input {
+.dados-cliente-input input,
+.autofill-box input {
   padding: 6px;
   width: 100%;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.document-input {
+  max-width: 200px;
 }
 
 .dados-cliente-input span {
