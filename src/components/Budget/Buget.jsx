@@ -127,21 +127,17 @@ function Budget({ usuario }) {
           .update({
             // insere os dados abaixo na tabela orçamentos
             cliente_id: clienteSalvo.id,
-            data: new Date().toLocaleDateString("pt-BR", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            }),
+            data: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
             vendedor: vendedor,
             forma_pagamento: formaPagamento,
             obs_pagamento: condicaoPagamento,
-            prazo_entrega: prazoEntrega,
+            prazo_entrega: Number(prazoEntrega),
             itens: itensOrcamento,
             subtotal: valorTotal,
             desconto: calculoDesconto,
-            frete: frete,
+            frete: Number(frete),
             valor_total: valorTotalFinal,
-            porcentagem_desconto: desconto,
+            porcentagem_desconto: Number(desconto),
             status: "pendente",
           })
           .select()
@@ -157,21 +153,17 @@ function Budget({ usuario }) {
           .insert({
             // insere os dados abaixo na tabela orçamentos
             cliente_id: clienteSalvo.id,
-            data: new Date().toLocaleDateString("pt-BR", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            }),
+            data: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
             vendedor: vendedor,
             forma_pagamento: formaPagamento,
             obs_pagamento: condicaoPagamento,
-            prazo_entrega: prazoEntrega,
+            prazo_entrega: Number(prazoEntrega),
             itens: itensOrcamento,
             subtotal: valorTotal,
             desconto: calculoDesconto,
-            frete: frete,
+            frete: Number(frete),
             valor_total: valorTotalFinal,
-            porcentagem_desconto: desconto,
+            porcentagem_desconto: Number(desconto),
             status: "pendente",
           })
           .select() // seleciona o dado e guarda na variável orcamentoSalvo
