@@ -10,6 +10,10 @@ O **Stock Manager** é uma aplicação web desenvolvida para automatizar o contr
 > **💡 Contexto do Projeto:** > Este sistema não é apenas um projeto de estudo, mas sim uma solução nascida de uma **iniciativa proativa** para resolver um gargalo real do setor logístico e comercial de uma empresa moveleira. O foco foi entregar um MVP (Produto Mínimo Viável) funcional rapidamente, substituindo planilhas manuais por um sistema web centralizado e responsivo.
 
 ## 🎨 Demonstração
+<img width="1898" height="867" alt="Captura de tela 2026-04-06 125928" src="https://github.com/user-attachments/assets/1fe4eb97-33b9-4ee8-99fc-42bc5b848db8" />
+
+<img width="1900" height="864" alt="Captura de tela 2026-04-06 125936" src="https://github.com/user-attachments/assets/32dd0475-b3b2-484b-bbbd-3dbc25aa4021" />
+
 
 ## 🚀 Funcionalidades Principais
 
