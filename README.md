@@ -49,7 +49,7 @@ Como este projeto nasceu com o foco de entregar valor e resolver um problema de 
 1. **Clone o repositório:**
 
    ```bash
-   git clone https://github.com/seu-usuario/stock-manager.git
+   git clone https://github.com/ViniSoaresDEV/stock-manager.git
    ```
 
 2. **Acesse a pasta do projeto:**
