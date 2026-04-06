@@ -23,7 +23,7 @@ function App() {
 
   // Verificando acesso ADM para liberar edição do conteúdo do estoque
   const isAdm = (user) => {
-    if (user !== 'adm') {
+    if (user !== 'adm' || user !== 'teste@portifolio.com') {
       setLoginAdm(true);
     } else {
       setLoginAdm(false);
