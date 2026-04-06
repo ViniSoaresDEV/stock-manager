@@ -17,7 +17,7 @@ function SideMenu({ onLogout, navegar, ativo, fechar, usuario }) {
         >
           Bem-vindo(a), {usuario.charAt(0).toUpperCase() + usuario.slice(1)}!
         </span>
-        <h2 style={{ marginBottom: '30px', color: 'white' }}>Bellano Móveis</h2>
+        <h2 style={{ marginBottom: '30px', color: 'white' }}>Lutaro Móveis</h2>
         <ul className="sidebar-list">
           <li>
             <a
