@@ -381,7 +381,7 @@ function Budget({ usuario }) {
     doc.setFontSize(24);
     doc.setTextColor(...colorPurple);
     doc.setFont('helvetica', 'bold');
-    doc.addImage(logo, marginX, 12, 45, 15);
+    // doc.addImage(logo, marginX, 12, 45, 15);
 
     // Lado Direito: Box Cinza de Contato
     doc.setFillColor(...colorGray);
@@ -390,12 +390,12 @@ function Budget({ usuario }) {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text('21 3083-9402 | 97045-5771', 105, 20);
-    doc.text('www.bellanomoveis.com.br', 105, 24);
-    doc.text('contato@bellanomoveis.com.br', 105, 28);
+    doc.text('21 1111-1111 | 99999-9999', 105, 20);
+    doc.text('www.lutaromoveis.com.br', 105, 24);
+    doc.text('contato@lutaromoveis.com.br', 105, 28);
 
-    doc.text('Rua Cuba, 379 - Sobreloja', 150, 20);
-    doc.text('Penha Circular - CEP 21020-160', 150, 24);
+    doc.text('Rua Cuba, S/N - Sobreloja', 150, 20);
+    doc.text('Penha Circular - CEP 00000-000', 150, 24);
     doc.text('Rio de Janeiro - RJ', 150, 28);
 
     currentY = 40; // Desce o cursor
