@@ -46,7 +46,7 @@ function Login({ onLogin, adm, privacidade }) {
   return (
     <div className="container">
       <div className="login-box">
-        <h1 className="login-title">Login - Bellano Móveis</h1>
+        <h1 className="login-title">Login - Lutaro Móveis</h1>
         <div className="input-container">
           <div className="login-input-box">
             <span>Usuário</span>
