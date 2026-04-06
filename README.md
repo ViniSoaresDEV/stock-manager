@@ -79,4 +79,4 @@ Como este projeto nasceu com o foco de entregar valor e resolver um problema de 
 
 ---
 
-Desenvolvido por **[Seu Nome]** - [Conecte-se comigo no LinkedIn](https://linkedin.com/in/seu-usuario)
+Desenvolvido por **Vinícius Soares**
