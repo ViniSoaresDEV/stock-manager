@@ -657,7 +657,7 @@ function Budget({ usuario }) {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.text(
-      'GMZ Indústria e Comércio de Móveis LTDA | CNPJ 29.267.422/0001-00',
+      'Lutaro Industria e Comércio de Móveis LTDA | CNPJ 00.000.000/0001-00',
       105,
       294.5,
       {
