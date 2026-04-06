@@ -16,12 +16,12 @@ function SearchBudget({ aoClicarEmEditar, checaUsuario }) {
         .select('*, clientes(*)')
         .order('data', { ascending: false });
 
-      if (checaUsuario === 'raquel') {
-        query = query.eq('vendedor', 'Raquel Passos');
-      } else if (checaUsuario === 'thays') {
-        query = query.eq('vendedor', 'Thays Rianelli');
-      } else if (checaUsuario === 'aldeir') {
-        query = query.eq('vendedor', 'Aldeir Gonçalves');
+      if (checaUsuario === 'milena') {
+        query = query.eq('vendedor', 'Milena Passos');
+      } else if (checaUsuario === 'maria') {
+        query = query.eq('vendedor', 'Maria Antonela');
+      } else if (checaUsuario === 'carlos') {
+        query = query.eq('vendedor', 'Carlos Gonçalves');
       }
 
       if (idDigitado) {
